@@ -1,37 +1,43 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
-  },
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignoreUnknown": true,
-    "includes": ["**", "!node_modules", "!.next", "!dist", "!build"]
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!**/.next",
+      "!**/dist",
+      "!**/.turbo",
+      "!**/.vscode",
+      "!**/.source",
+      "!**/src/components/ui/*"
+    ]
   },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "space",
-    "indentWidth": 2
-  },
+  "extends": ["ultracite/core", "ultracite/next", "ultracite/react"],
   "linter": {
-    "enabled": true,
     "rules": {
-      "recommended": true,
+      "complexity": {
+        "noVoid": "off"
+      },
+      "nursery": {
+        "noLeakedRender": "off",
+        "noIncrementDecrement": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off",
+        "useTopLevelRegex": "off"
+      },
+      "style": {
+        "noMagicNumbers": "off",
+        "useForOf": "off"
+      },
       "suspicious": {
-        "noUnknownAtRules": "off"
+        "noConsole": "off"
       }
-    },
-    "domains": {
-      "next": "recommended",
-      "react": "recommended"
     }
   },
-  "assist": {
-    "actions": {
-      "source": {
-        "organizeImports": "on"
-      }
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }
