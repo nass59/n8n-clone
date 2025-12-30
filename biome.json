@@ -9,7 +9,8 @@
       "!**/.turbo",
       "!**/.vscode",
       "!**/.source",
-      "!**/src/components/ui/*"
+      "!**/src/components/ui/*",
+      "!bun.lock"
     ]
   },
   "extends": ["ultracite/core", "ultracite/next", "ultracite/react"],

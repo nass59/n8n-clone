@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/useAwait: temp */
 import { initTRPC } from "@trpc/server";
 import { cache } from "react";
 
