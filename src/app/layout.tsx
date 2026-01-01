@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Spline_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/client";
 
 import "./globals.css";
@@ -30,7 +31,10 @@ export default function RootLayout({
   return (
     <html className={`${splineSans.variable} dark`} lang="en">
       <body className={`${splineSansMono.variable} antialiased`}>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <TRPCReactProvider>
+          {children}
+          <Toaster />
+        </TRPCReactProvider>
       </body>
     </html>
   );
