@@ -65,3 +65,8 @@ model Verification {
 
   @@index([identifier])
 }
+
+model Workflow {
+  id String @id @default(cuid())
+  name String
+}
