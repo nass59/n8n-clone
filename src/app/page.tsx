@@ -2,7 +2,6 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { LogoutButton } from "@/app/logout";
 import { Button } from "@/components/ui/button";
 import { useTRPC } from "@/trpc/client";
 
@@ -44,7 +43,6 @@ export default function Page() {
       >
         Create Workflow
       </Button>
-      <LogoutButton />
     </div>
   );
 }
