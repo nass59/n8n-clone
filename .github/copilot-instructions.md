@@ -1,386 +1,371 @@
-# Copilot Instructions for Dev Playground
+# Copilot Instructions for n8n Clone
 
 ## Project Overview
 
-This is an **experimental developer playground** that combines:
+This is a **workflow automation platform** (n8n clone) that combines AI capabilities with business process automation. It provides technical teams the flexibility of code with the speed of no-code.
 
-- A blog for sharing thoughts and learnings
-- Interactive demos (CSS experiments, TypeScript utilities, UI components)
-- A modular, scalable architecture for experimentation
+**Core Features:**
+- Visual workflow builder
+- AI-powered automation
+- Background job processing (Inngest)
+- Type-safe API layer (tRPC)
+- User authentication (Better Auth)
+- PostgreSQL database (Prisma ORM)
 
 ---
 
 ## Tech Stack
 
-| Category           | Technology                                   |
-| ------------------ | -------------------------------------------- |
-| Framework          | **Next.js 16+** (App Router, RSC)            |
-| Language           | **TypeScript 5.9+** (strict mode)            |
-| Styling            | **Tailwind CSS 4**                           |
-| UI Components      | **shadcn/ui** with Base UI (base-vega style) |
-| Icons              | **Tabler Icons** (`@tabler/icons-react`)     |
-| Linting/Formatting | **Biome** with **Ultracite** preset          |
-| Package Manager    | **Bun**                                      |
+| Category           | Technology                                         |
+| ------------------ | -------------------------------------------------- |
+| Framework          | **Next.js 16+** (App Router, RSC)                  |
+| Language           | **TypeScript 5.9+** (strict mode)                  |
+| Database           | **PostgreSQL** with Prisma ORM + Neon adapter      |
+| Authentication     | **Better Auth**                                    |
+| API Layer          | **tRPC** (type-safe, end-to-end)                   |
+| Background Jobs    | **Inngest** (event-driven, AI-wrapped steps)       |
+| AI Integration     | **Vercel AI SDK** (OpenAI, Anthropic, Google)      |
+| Styling            | **Tailwind CSS 4**                                 |
+| UI Components      | **shadcn/ui** with Base UI (base-vega)             |
+| Icons              | **Tabler Icons** (`@tabler/icons-react`)           |
+| Linting/Formatting | **Biome** with **Ultracite** preset                |
+| Package Manager    | **Bun**                                            |
 
 ---
 
-## Code Style & Conventions
+## Code Conventions (Critical for Agents)
 
-### TypeScript
+### TypeScript - Strict Rules
 
-- **Always prefer `type` over `interface`** for type definitions
-- Use strict TypeScript — no `any` types unless absolutely necessary
-- Prefer `unknown` over `any` when type is truly unknown
-- Use `satisfies` operator for type-safe object literals
+✅ **ALWAYS:**
+- Use `type` over `interface` for all type definitions
+- Enable strict mode - no `any` types (use `unknown` instead)
 - Export types explicitly: `export type { MyType }`
+- Use `satisfies` operator for type-safe object literals
 
 ```typescript
-// ✅ Preferred
-type ButtonProps = {
-  variant: "primary" | "secondary";
-  size?: "sm" | "md" | "lg";
-  children: React.ReactNode;
+// ✅ Correct
+type WorkflowNode = {
+  id: string;
+  type: "trigger" | "action" | "condition";
+  config: Record<string, unknown>;
 };
 
-// ❌ Avoid
-interface ButtonProps {
-  variant: string;
-  size?: string;
-  children: React.ReactNode;
+// ❌ Wrong
+interface WorkflowNode {
+  type: string;
+  config: any;
 }
 ```
 
-### React & Next.js
+### Component & Export Patterns - Non-Negotiable
 
-- Use **Server Components** by default (no `'use client'` unless necessary)
-- Add `'use client'` directive only for components that need interactivity
-- Prefer **async components** for data fetching in Server Components
-- Use the **App Router** patterns (`page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`)
-- Colocate related files (component, types, utils) when it makes sense
+✅ **Pages (app/**/page.tsx):**
+- Use `export default function` (function declarations)
 
-```typescript
-// ✅ Server Component - Page (function declaration)
-export default async function BlogPostPage({ params }: BlogPostProps) {
-  const post = await getPost(params.slug);
-  return <article>{post.content}</article>;
-}
-
-// ✅ Client Component (arrow function with export const)
-("use client");
-
-import { useState } from "react";
-
-export const InteractiveDemo = () => {
-  const [count, setCount] = useState(0);
-  return <button onClick={() => setCount((c) => c + 1)}>{count}</button>;
-};
-```
-
-### Component & Export Patterns
-
-- **Pages**: Use `export function` (function declarations) for page components
-- **Everything else**: Use `export const` with arrow functions for components, utilities, hooks
-- Destructure props in function signature
-- Keep components focused and single-responsibility
-- Extract hooks into `@/hooks` when reusable
+✅ **Everything Else:**
+- Use `export const` with arrow functions
+- Components, utilities, hooks, constants
 
 ```typescript
-// ✅ Page Component (app/blog/page.tsx)
-export function BlogPage() {
-  return <main>...</main>
+// ✅ Page Component (app/workflows/page.tsx)
+export default function WorkflowsPage() {
+  return <main>...</main>;
 }
 
 // ✅ Regular Component
-export const ProjectCard = ({ title, description, href }: ProjectCardProps) => {
-  return (
-    <Card>
-      <CardHeader>{title}</CardHeader>
-      <CardContent>{description}</CardContent>
-    </Card>
-  )
-}
+export const WorkflowCard = ({ workflow }: WorkflowCardProps) => {
+  return <Card>{workflow.name}</Card>;
+};
 
-// ✅ Utility function
-export const formatDate = (date: Date): string => {
-  return date.toLocaleDateString()
-}
-
-// ✅ Custom hook
-export const useLocalStorage = <T,>(key: string, initialValue: T) => {
+// ✅ Utility/Hook
+export const useWorkflow = (id: string) => {
   // ...
+};
+
+// ❌ NEVER use for pages
+const WorkflowsPage = () => { ... };
+export default WorkflowsPage;
+
+// ❌ NEVER use React.FC
+const WorkflowCard: React.FC<Props> = (props) => { ... };
+```
+
+### React & Next.js Patterns
+
+✅ **Server Components by default** (no `'use client'` unless needed)
+✅ Add `'use client'` only for: interactivity, hooks, browser APIs
+✅ Use async Server Components for data fetching
+✅ Colocate related files when it makes sense
+
+```typescript
+// ✅ Server Component - async data fetching
+export default async function WorkflowPage({ params }: PageProps) {
+  const { id } = await params;
+  const workflow = await db.workflow.findUnique({ where: { id } });
+  return <WorkflowEditor workflow={workflow} />;
 }
 
-// ❌ Avoid for pages
-const BlogPage = () => { ... }
-export default BlogPage
+// ✅ Client Component - interactivity
+"use client";
 
-// ❌ Avoid React.FC
-const ProjectCard: React.FC<ProjectCardProps> = (props) => {
-  return <Card>...</Card>
-}
+import { useState } from "react";
+
+export const WorkflowBuilder = () => {
+  const [nodes, setNodes] = useState<WorkflowNode[]>([]);
+  return <Canvas nodes={nodes} onNodesChange={setNodes} />;
+};
 ```
 
 ### File & Folder Naming
 
-- Use **kebab-case** for all files and folders: `project-card.tsx`, `use-local-storage.ts`
-- Component files should match component name: `ProjectCard` → `project-card.tsx`
-- Index files are discouraged — prefer explicit imports
+- **kebab-case** for all files/folders: `workflow-builder.tsx`, `use-nodes.ts`
+- Component files match component name: `WorkflowCard` → `workflow-card.tsx`
+- Avoid index files - prefer explicit imports
 
-### Imports
-
-- Use **path aliases**: `@/components`, `@/lib`, `@/hooks`
-- Group imports: React → External → Internal → Types → Styles
-- Use named exports for components, types, and utilities
+### Import Organization
 
 ```typescript
+// 1. React
 import { useState, useEffect } from "react";
 
-import { IconArrowRight } from "@tabler/icons-react";
+// 2. External packages
+import { IconPlus } from "@tabler/icons-react";
 
+// 3. Internal (use path aliases)
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import type { ProjectCardProps } from "./types";
+import { trpc } from "@/trpc/client";
+import { db } from "@/lib/db";
+
+// 4. Types
+import type { Workflow, WorkflowNode } from "@/types/workflow";
 ```
 
 ---
 
-## Styling Guidelines
+## Architecture Patterns (n8n Clone Specific)
 
-### Tailwind CSS 4
+### tRPC API Layer
 
-- Use Tailwind utility classes directly in JSX
-- Use the `cn()` utility from `@/lib/utils` for conditional classes
-- Prefer CSS variables for theming (defined in `globals.css`)
-- Use `tw-animate-css` for animations
+✅ Define routers in `@/trpc/routers/`
+✅ Use in Server Components: `import { trpc } from "@/trpc/server"`
+✅ Use in Client Components: `import { trpc } from "@/trpc/client"`
+
+```typescript
+// Server Component
+export default async function WorkflowsPage() {
+  const workflows = await trpc.workflow.list();
+  return <WorkflowList workflows={workflows} />;
+}
+
+// Client Component
+"use client";
+
+export const CreateWorkflowButton = () => {
+  const utils = trpc.useUtils();
+  const create = trpc.workflow.create.useMutation({
+    onSuccess: () => utils.workflow.list.invalidate(),
+  });
+
+  return <Button onClick={() => create.mutate({ name: "New" })}>Create</Button>;
+};
+```
+
+### Inngest Background Jobs
+
+✅ Define functions in `@/inngest/functions.ts`
+✅ Use `inngest.send()` to trigger events
+✅ Wrap AI steps for automatic retries
+
+```typescript
+import { inngest } from "@/inngest/client";
+
+export const processWorkflow = inngest.createFunction(
+  { id: "process-workflow" },
+  { event: "workflow.execute" },
+  async ({ event, step }) => {
+    const result = await step.ai.wrap("analyze-workflow", async () => {
+      // AI logic here - auto-retries on failure
+    });
+    return result;
+  }
+);
+```
+
+### Database (Prisma)
+
+✅ Import: `import { db } from "@/lib/db"`
+✅ Type-safe queries with Prisma client
+✅ Use transactions for multi-step operations
+
+```typescript
+// Create workflow with nodes atomically
+const workflow = await db.$transaction(async (tx) => {
+  const wf = await tx.workflow.create({
+    data: { name: "New Workflow", userId },
+  });
+  await tx.workflowNode.createMany({
+    data: nodes.map((n) => ({ ...n, workflowId: wf.id })),
+  });
+  return wf;
+});
+```
+
+### Authentication (Better Auth)
+
+✅ Server: `import { auth } from "@/lib/auth"`
+✅ Client: `import { authClient } from "@/lib/auth-client"`
+✅ Utilities: `import { getUser, requireAuth } from "@/lib/auth-utils"`
+
+```typescript
+// Protect Server Component
+export default async function DashboardPage() {
+  const user = await requireAuth(); // Throws if not authenticated
+  return <Dashboard user={user} />;
+}
+
+// Client-side auth
+"use client";
+
+export const LoginButton = () => {
+  const login = async () => {
+    await authClient.signIn.email({ email, password });
+  };
+  return <Button onClick={login}>Login</Button>;
+};
+```
+
+---
+
+## Project Structure (Optimized for Agents)
+
+```
+src/
+├── app/                     # Next.js App Router
+│   ├── (auth)/             # Auth routes (login, signup)
+│   ├── api/                # API endpoints
+│   │   ├── auth/[...all]/  # Better Auth handler
+│   │   ├── trpc/[trpc]/    # tRPC handler
+│   │   └── inngest/        # Inngest webhook
+│   └── workflows/          # Workflow pages
+├── components/
+│   └── ui/                 # shadcn/ui primitives
+├── hooks/                  # Custom React hooks
+├── inngest/               # Background job functions
+│   ├── client.ts          # Inngest client instance
+│   └── functions.ts       # Job definitions
+├── lib/                   # Core utilities
+│   ├── auth.ts            # Better Auth server
+│   ├── auth-client.ts     # Better Auth client
+│   ├── auth-utils.ts      # Auth helpers (getUser, requireAuth)
+│   ├── db.ts              # Prisma client instance
+│   └── utils.ts           # Shared utilities (cn, etc.)
+├── modules/               # Feature modules (auth, workflows)
+├── trpc/                  # tRPC setup
+│   ├── init.ts            # tRPC instance
+│   ├── client.tsx         # Client-side tRPC
+│   ├── server.tsx         # Server-side tRPC
+│   └── routers/           # API routers
+│       └── _app.ts        # Root router
+└── types/                 # Shared types
+
+prisma/
+├── schema.prisma          # Database schema
+└── migrations/            # Migration history
+```
+
+**Key Locations:**
+- Add tRPC routers: `src/trpc/routers/`
+- Add Inngest jobs: `src/inngest/functions.ts`
+- Add UI components: `src/components/ui/` (via shadcn CLI)
+- Add feature modules: `src/modules/[feature]/`
+
+---
+
+## Styling with Tailwind
 
 ```typescript
 import { cn } from "@/lib/utils";
 
-export function Card({ className, variant }: CardProps) {
+// ✅ Use cn() for conditional classes
+export const Card = ({ variant, className }: CardProps) => {
   return (
     <div
       className={cn(
-        "rounded-lg border bg-card p-6 shadow-sm",
-        variant === "featured" && "border-primary",
+        "rounded-lg border bg-card p-6",
+        variant === "primary" && "border-primary",
         className
       )}
     />
   );
-}
-```
-
-### shadcn/ui Components
-
-- Import from `@/components/ui/*`
-- Customize via CSS variables, not by modifying component internals
-- Use `class-variance-authority` (cva) for component variants
-- Follow the base-vega style system
-
----
-
-## Project Structure
-
-```
-src/
-├── app/                    # Next.js App Router
-│   ├── (routes)/           # Route groups
-│   ├── api/                # API routes
-│   ├── globals.css         # Global styles & Tailwind
-│   ├── layout.tsx          # Root layout
-│   └── page.tsx            # Home page
-├── components/
-│   ├── ui/                 # shadcn/ui primitives
-│   └── [feature]/          # Feature-specific components
-├── hooks/                  # Custom React hooks
-├── lib/                    # Utilities & helpers
-│   └── utils.ts            # cn() and shared utilities
-├── types/                  # Shared type definitions
-└── content/                # MDX/content files (if applicable)
-```
-
----
-
-## Biome & Ultracite
-
-This project uses **Biome** with the **Ultracite** preset for linting and formatting.
-
-### Commands
-
-```bash
-# Check for issues
-bun run lint
-
-# Auto-fix and format
-bun run format
-```
-
-### Key Rules
-
-- No namespace imports (use named imports)
-- No magic numbers in complex logic
-- Prefer `for...of` loops
-- Console statements are allowed (development playground)
-- React Server Components rules enabled
-
----
-
-## Best Practices
-
-### Performance
-
-- Leverage React Server Components for static content
-- Use `next/image` for optimized images
-- Implement proper loading states with `loading.tsx`
-- Use `Suspense` boundaries strategically
-
-### Accessibility
-
-- Use semantic HTML elements
-- Include proper ARIA attributes when needed
-- Ensure keyboard navigation works
-- Maintain sufficient color contrast
-
-### Error Handling
-
-- Use `error.tsx` for route-level error boundaries
-- Implement proper error states in forms
-- Log errors appropriately in development
-
-### Testing (Future)
-
-- Component tests with Vitest + Testing Library
-- E2E tests with Playwright
-- Type checking as a form of testing
-
----
-
-## Common Patterns
-
-### Async Data Fetching (Server Component)
-
-```typescript
-type PostPageProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = await params;
-  const post = await getPost(slug);
-
-  if (!post) {
-    notFound();
-  }
-
-  return <PostContent post={post} />;
-}
-```
-
-### Client-Side State
-
-```typescript
-"use client";
-
-import { useState, useCallback } from "react";
-
-export const DemoPlayground = () => {
-  const [code, setCode] = useState("");
-
-  const handleExecute = useCallback(() => {
-    // Execute demo logic
-  }, [code]);
-
-  return (
-    <div>
-      <textarea value={code} onChange={(e) => setCode(e.target.value)} />
-      <Button onClick={handleExecute}>Run</Button>
-    </div>
-  );
 };
 ```
 
-### Form Components
-
-```typescript
-"use client";
-
-import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-
-export const ContactForm = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    // Process form
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <Field label="Email">
-        <Input type="email" name="email" required />
-      </Field>
-      <Button type="submit">Submit</Button>
-    </form>
-  );
-};
-```
+✅ Use Tailwind utilities directly
+✅ Use `cn()` from `@/lib/utils` for conditional styling
+✅ Customize via CSS variables in `globals.css`
+✅ shadcn components: `bunx shadcn@latest add [component]`
 
 ---
 
-## Playground-Specific Conventions
+## Development Commands
 
-### Interactive Demos
-
-- Wrap demos in a consistent container component
-- Include source code display option
-- Support live editing where possible
-- Document demo purpose and API
-
-### Blog Content
-
-- Use MDX for rich content (if implemented)
-- Include metadata (date, tags, reading time)
-- Support syntax highlighting for code blocks
-
-### Component Showcases
-
-- Create isolated examples for each component
-- Show multiple variants and states
-- Include copy-to-clipboard for code
+| Command              | Purpose                           |
+| -------------------- | --------------------------------- |
+| `bun run dev`        | Start Next.js dev server          |
+| `bun run dev:all`    | Start all services (Next + Inngest) |
+| `bun run lint`       | Check with Biome                  |
+| `bun run format`     | Format with Biome                 |
+| `bunx prisma studio` | Open database GUI                 |
+| `bunx prisma migrate dev` | Create/apply migration       |
+| `bunx shadcn@latest add [name]` | Add UI component         |
 
 ---
 
-## Do's and Don'ts
+## Critical Do's and Don'ts
 
-### ✅ Do
+### ✅ ALWAYS
 
 - Use Server Components by default
-- Prefer `type` over `interface`
+- Use `type` over `interface`
 - Use path aliases (`@/`)
-- Write self-documenting code
-- Keep components small and focused
-- Use Tailwind utilities with `cn()`
+- Use `export const` for components/utils
+- Use `export default function` for pages
+- Keep components focused and small
+- Handle loading/error states
+- Use `cn()` for conditional classes
 
-### ❌ Don't
+### ❌ NEVER
 
-- Use `any` type without justification
-- Create deeply nested component trees
-- Mix concerns in a single component
-- Use inline styles (prefer Tailwind)
+- Use `any` type (use `unknown`)
+- Use `React.FC` type
+- Create deeply nested components
 - Ignore TypeScript errors
-- Skip accessibility considerations
+- Use inline styles (use Tailwind)
+- Mix Server/Client component concerns
+- Forget to add `'use client'` when using hooks/interactivity
+- Skip accessibility (semantic HTML, ARIA when needed)
 
 ---
 
-## Quick Reference
+## Agent Quick Reference
 
-| Task             | Command/Pattern                      |
-| ---------------- | ------------------------------------ |
-| New component    | `src/components/my-component.tsx`    |
-| New page         | `src/app/my-page/page.tsx`           |
-| Add UI component | `bunx shadcn@latest add [component]` |
-| Lint             | `bun run lint`                       |
-| Format           | `bun run format`                     |
-| Dev server       | `bun run dev`                        |
-| Build            | `bun run build`                      |
-| Start (prod)     | `bun run start`                      |
+**When adding a workflow feature:**
+1. Define Prisma schema in `prisma/schema.prisma`
+2. Run `bunx prisma migrate dev --name [name]`
+3. Create tRPC router in `src/trpc/routers/`
+4. Add Server Component page in `src/app/workflows/`
+5. Build Client Component for interactivity
+6. Add Inngest function if background processing needed
+
+**When adding UI:**
+1. Check if shadcn component exists: `bunx shadcn@latest add [name]`
+2. Create custom component in `src/components/`
+3. Use `cn()` for styling, Tailwind utilities
+4. Export with `export const ComponentName = () => { ... }`
+
+**When debugging:**
+- Check type errors: `bun run lint`
+- Inspect database: `bunx prisma studio`
+- View Inngest jobs: `bun run inngest:dev` (http://localhost:8288)
+- Check Next.js errors in terminal and browser console
