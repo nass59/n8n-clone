@@ -28,7 +28,13 @@
       },
       "style": {
         "noMagicNumbers": "off",
-        "useForOf": "off"
+        "useForOf": "off",
+        "useConsistentTypeDefinitions": {
+          "level": "error",
+          "options": {
+            "style": "type"
+          }
+        }
       },
       "suspicious": {
         "noConsole": "off"
