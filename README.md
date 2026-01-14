@@ -5,7 +5,8 @@ A modern, production-ready Next.js starter with authentication, database, API la
 ## ✨ Features
 
 - 🔐 **Authentication** - Email/password auth with [Better Auth](https://better-auth.com)
-- 🗄️ **Database** - PostgreSQL with [Prisma](https://prisma.io) ORM and Neon adapter
+- � **Payments** - Subscription management with [Polar](https://polar.sh)
+- �🗄️ **Database** - PostgreSQL with [Prisma](https://prisma.io) ORM and Neon adapter
 - 🔌 **Type-Safe API** - End-to-end type safety with [tRPC](https://trpc.io)
 - ⚡ **Background Jobs** - Reliable job processing with [Inngest](https://inngest.com)
 - 🤖 **AI Ready** - Multi-provider AI SDK (OpenAI, Anthropic, Google)
@@ -21,6 +22,7 @@ A modern, production-ready Next.js starter with authentication, database, API la
 | Language           | **TypeScript 5.9+** (strict mode)                  |
 | Database           | **PostgreSQL** with Prisma ORM                     |
 | Authentication     | **Better Auth**                                    |
+| Payments           | **Polar** (subscriptions & monetization)           |
 | API Layer          | **tRPC**                                           |
 | Background Jobs    | **Inngest**                                        |
 | AI Integration     | **Vercel AI SDK** (OpenAI, Anthropic, Google)      |
@@ -87,6 +89,10 @@ DATABASE_URL="postgresql://user:password@localhost:5432/nodebase"
 BETTER_AUTH_SECRET="your-secret-key-here"
 BETTER_AUTH_URL="http://localhost:3000"
 
+# Payments (Polar)
+POLAR_ACCESS_TOKEN="your-polar-access-token"
+POLAR_SERVER="sandbox" # or "production"
+
 # AI Providers (optional)
 ANTHROPIC_API_KEY="your-anthropic-key"
 OPENAI_API_KEY="your-openai-key"
@@ -151,6 +157,19 @@ Routes:
 - `/login` - User login
 - `/signup` - User registration
 - `/logout` - User logout
+
+### Payments & Subscriptions
+
+Built with **Polar**, providing:
+- Subscription management
+- Customer state tracking
+- Better Auth integration
+- Sandbox and production environments
+
+Features:
+- `useSubscription` - React hook for customer state
+- `useHasActiveSubscription` - Check subscription status
+- Polar client configured in `src/lib/polar.ts`
 
 ### Database & ORM
 
