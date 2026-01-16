@@ -2,19 +2,42 @@
 
 import { useRouter } from "next/navigation";
 import type { PropsWithChildren } from "react";
-import { EntityContainer, EntityHeader } from "@/components/entity-components";
+import {
+  EntityContainer,
+  EntityHeader,
+  EntityPagination,
+  EntitySearch,
+} from "@/components/entity-components";
+import { useEntitySearch } from "@/hooks/use-entity-search";
 import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
 import {
   useCreateWorkflow,
   useSuspenseWorkflows,
 } from "@/modules/workflows/hooks/use-workflows";
+import { useWorkflowsParams } from "@/modules/workflows/hooks/use-workflows-params";
+
+export const WorkflowSearch = () => {
+  const [params, setParams] = useWorkflowsParams();
+  const { searchValue, onSearchChange } = useEntitySearch({
+    params,
+    setParams,
+  });
+
+  return (
+    <EntitySearch
+      onChange={onSearchChange}
+      placeholder="Search workflows"
+      value={searchValue}
+    />
+  );
+};
 
 export const WorkflowsList = () => {
   const workflows = useSuspenseWorkflows();
 
   return (
     <div className="flex flex-1 items-center justify-center">
-      {JSON.stringify(workflows.data, null, 2)}
+      <code>{JSON.stringify(workflows.data, null, 2)}</code>
     </div>
   );
 };
@@ -50,8 +73,28 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
   );
 };
 
+export const WorkflowsPagination = () => {
+  const workflows = useSuspenseWorkflows();
+  const [params, setParams] = useWorkflowsParams();
+
+  return (
+    <EntityPagination
+      disabled={workflows.isFetching}
+      onPageChange={(page) => setParams({ ...params, page })}
+      page={workflows.data.page}
+      totalPages={workflows.data.totalPages}
+    />
+  );
+};
+
 export const WorkflowsContainer = ({ children }: PropsWithChildren) => {
   return (
-    <EntityContainer header={<WorkflowsHeader />}>{children}</EntityContainer>
+    <EntityContainer
+      header={<WorkflowsHeader />}
+      pagination={<WorkflowsPagination />}
+      search={<WorkflowSearch />}
+    >
+      {children}
+    </EntityContainer>
   );
 };
