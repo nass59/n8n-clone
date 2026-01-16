@@ -65,7 +65,7 @@ export const AppSidebar = () => {
               <Image
                 alt="Nodebase"
                 height={30}
-                src="/logos/logo-2.svg"
+                src="/logos/logo.svg"
                 width={30}
               />
               <span className="font-semibold text-sm">Nodebase</span>
