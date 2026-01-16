@@ -1,0 +1,6 @@
+{
+  "permissions": {
+    "allow": ["Bash(bun run lint:*)", "Bash(bun run format:*)"]
+  },
+  "outputStyle": "Explanatory"
+}
