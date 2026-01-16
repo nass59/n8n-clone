@@ -1,6 +1,11 @@
 {
   "permissions": {
-    "allow": ["Bash(bun run lint:*)", "Bash(bun run format:*)"]
+    "allow": [
+      "Bash(bun run lint:*)",
+      "Bash(bun run format:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)"
+    ]
   },
   "outputStyle": "Explanatory"
 }
