@@ -1,20 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import z from "zod";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -25,21 +16,39 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
+import { AUTH_ROUTES } from "../lib/auth-constants";
+import { registerSchema } from "../lib/auth-schemas";
+import type { RegisterFormValues } from "../types/auth.types";
+import { AuthCard } from "./auth-card";
+import { OAuthButtons } from "./oauth-buttons";
+import { PasswordInput } from "./password-input";
 
-const registerSchema = z
-  .object({
-    email: z.email("Invalid email address"),
-    password: z.string().min(1, "Password is required"),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Password don't match",
-    path: ["confirmPassword"],
-  });
-
-type RegisterFormValues = z.infer<typeof registerSchema>;
-
-export function RegisterForm() {
+/**
+ * User registration form with email/password and OAuth options.
+ *
+ * Handles new user signup through Better Auth, supporting both
+ * traditional email/password registration and OAuth providers (GitHub, Google).
+ *
+ * @remarks
+ * **Features:**
+ * - Email/password registration
+ * - OAuth (GitHub, Google)
+ * - Password strength validation
+ * - Password confirmation matching
+ * - Password visibility toggle
+ * - Form validation with Zod
+ * - Auto-redirect on success
+ * - Error toast notifications
+ * - Proper autocomplete attributes
+ *
+ * **Flow:**
+ * 1. User enters email, password, and confirmation
+ * 2. Form validates with registerSchema
+ * 3. Calls authClient.signUp.email()
+ * 4. On success: Redirects to dashboard ("/")
+ * 5. On error: Shows error toast
+ */
+export const RegisterForm = () => {
   const router = useRouter();
 
   const form = useForm({
@@ -73,113 +82,83 @@ export function RegisterForm() {
   const isPending = form.formState.isSubmitting;
 
   return (
-    <div className="flex flex-col gap-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Get started</CardTitle>
-          <CardDescription>Login to continue</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
-              <div className="grid gap-6">
-                <div className="flex flex-col gap-4">
-                  <Button
-                    className="w-full"
-                    disabled={isPending}
-                    type="button"
-                    variant="outline"
-                  >
-                    <Image
-                      alt="Github"
-                      height={20}
-                      src="/logos/github.svg"
-                      width={20}
-                    />
-                    Continue with GitHub
-                  </Button>
-                  <Button
-                    className="w-full"
-                    disabled={isPending}
-                    type="button"
-                    variant="outline"
-                  >
-                    <Image
-                      alt="Google"
-                      height={20}
-                      src="/logos/google.svg"
-                      width={20}
-                    />
-                    Continue with Google
-                  </Button>
-                </div>
-                <div className="flex flex-col gap-4">
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Email</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="m@example.com"
-                            type="email"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Password</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="*******"
-                            type="password"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Confirm password</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="*******"
-                            type="password"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button className="w-full" disabled={isPending} type="submit">
-                    Sign up
-                  </Button>
-                </div>
-                <div className="text-center text-sm">
-                  Already have an account?{" "}
-                  <Link className="underline underline-offset-4" href="/login">
-                    Login
-                  </Link>
-                </div>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
-    </div>
+    <AuthCard
+      description="Create your account to get started"
+      title="Get started"
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid gap-6">
+            <OAuthButtons disabled={isPending} />
+            <div className="flex flex-col gap-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        autoComplete="email"
+                        placeholder="m@example.com"
+                        type="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        autoComplete="new-password"
+                        placeholder="*******"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm password</FormLabel>
+                    <FormControl>
+                      <PasswordInput
+                        autoComplete="new-password"
+                        placeholder="*******"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button className="w-full" disabled={isPending} type="submit">
+                Sign up
+              </Button>
+            </div>
+            <div className="text-center text-sm">
+              Already have an account?{" "}
+              <Link
+                className="underline underline-offset-4"
+                href={AUTH_ROUTES.LOGIN}
+              >
+                Login
+              </Link>
+            </div>
+          </div>
+        </form>
+      </Form>
+    </AuthCard>
   );
-}
+};

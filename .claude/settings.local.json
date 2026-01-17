@@ -4,7 +4,9 @@
       "Bash(bun run lint:*)",
       "Bash(bun run format:*)",
       "WebSearch",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Skill(Better:*)",
+      "WebFetch(domain:www.better-auth.com)"
     ]
   },
   "outputStyle": "Explanatory"

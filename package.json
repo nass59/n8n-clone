@@ -11,7 +11,20 @@
     "lint": "biome check",
     "format": "biome check --write .",
     "inngest:dev": "inngest-cli dev",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "postinstall": "bunx --bun prisma generate",
+    "db:generate": "bunx --bun prisma generate",
+    "db:migrate": "bunx --bun prisma migrate dev",
+    "db:migrate:prod": "bunx --bun prisma migrate deploy",
+    "db:push": "bunx --bun prisma db push",
+    "db:seed": "bunx --bun prisma db seed",
+    "db:reset": "bunx --bun prisma migrate reset",
+    "db:studio": "bunx --bun prisma studio",
+    "db:format": "bunx --bun prisma format",
+    "auth:generate": "bunx @better-auth/cli generate",
+    "auth:migrate": "bunx @better-auth/cli migrate",
+    "auth:info": "bunx @better-auth/cli info",
+    "auth:secret": "bunx @better-auth/cli secret"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.15",
