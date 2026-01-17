@@ -9,9 +9,9 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth, type Session } from "@/lib/auth";
+import { AUTH_ROUTES } from "@/modules/auth/lib/auth-constants";
 
 type AuthRedirectOptions = {
-  /** The URL to redirect to. Defaults vary by function. */
   redirectTo?: string;
 };
 
@@ -42,7 +42,7 @@ export const getSession = async (): Promise<Session | null> => {
 export const requireAuth = async (
   options: AuthRedirectOptions = {}
 ): Promise<Session> => {
-  const { redirectTo = "/login" } = options;
+  const { redirectTo = AUTH_ROUTES.LOGIN } = options;
 
   const session = await getSession();
 
@@ -62,7 +62,7 @@ export const requireAuth = async (
 export const requireUnauth = async (
   options: AuthRedirectOptions = {}
 ): Promise<void> => {
-  const { redirectTo = "/" } = options;
+  const { redirectTo = AUTH_ROUTES.DASHBOARD } = options;
 
   const session = await getSession();
 
