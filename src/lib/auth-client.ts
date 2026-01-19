@@ -1,10 +1,3 @@
-/**
- * @fileoverview Client-side authentication utilities for Nodebase.
- *
- * This module provides React hooks and methods for authentication in Client Components.
- * It wraps Better Auth's React client with Polar subscription integration.
- */
-
 import { polarClient } from "@polar-sh/better-auth";
 import { createAuthClient } from "better-auth/react";
 

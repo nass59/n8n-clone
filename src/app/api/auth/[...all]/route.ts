@@ -5,11 +5,6 @@
  * authentication endpoints provided by Better Auth. The `toNextJsHandler` adapter
  * converts the Better Auth instance into Next.js-compatible GET and POST handlers.
  *
- * @remarks
- * Better Auth uses a path-based routing convention where all auth endpoints
- * are prefixed with `/api/auth/`. This catch-all route captures all sub-paths
- * and delegates them to the appropriate Better Auth handler.
- *
  * ## Core Authentication Endpoints
  *
  * | Method | Endpoint                      | Description                              |

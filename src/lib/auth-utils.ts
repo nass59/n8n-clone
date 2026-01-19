@@ -1,11 +1,3 @@
-/**
- * @fileoverview Server-side authentication utilities for Next.js App Router.
- *
- * Provides helper functions for authentication guards in Server Components
- * and Server Actions. These utilities handle session retrieval and redirect
- * logic for protected and public-only routes.
- */
-
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth, type Session } from "@/lib/auth";
@@ -42,9 +34,8 @@ export const getSession = async (): Promise<Session | null> => {
 export const requireAuth = async (
   options: AuthRedirectOptions = {}
 ): Promise<Session> => {
-  const { redirectTo = AUTH_ROUTES.LOGIN } = options;
-
   const session = await getSession();
+  const { redirectTo = AUTH_ROUTES.LOGIN } = options;
 
   if (!session) {
     redirect(redirectTo);

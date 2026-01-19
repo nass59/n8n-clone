@@ -17,13 +17,6 @@ type AuthCardProps = PropsWithChildren<{
  *
  * Provides consistent styling and layout for login, signup,
  * and other auth-related forms.
- *
- * @example
- * ```tsx
- * <AuthCard title="Welcome Back" description="Login to continue">
- *   <LoginFormContent />
- * </AuthCard>
- * ```
  */
 export const AuthCard = ({ title, description, children }: AuthCardProps) => {
   return (

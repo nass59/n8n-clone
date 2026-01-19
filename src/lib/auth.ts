@@ -1,11 +1,3 @@
-/**
- * @fileoverview Server-side authentication configuration for Nodebase.
- *
- * This module configures Better Auth with PostgreSQL (via Prisma), email/password
- * authentication, and Polar integration for subscription management. It is designed
- * for use in Next.js Server Components and API routes.
- */
-
 import { checkout, polar, portal } from "@polar-sh/better-auth";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";

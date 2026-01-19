@@ -34,13 +34,10 @@ type GlobalErrorProps = {
  *   ensure the error UI renders correctly regardless of CSS availability.
  * - Automatically reports errors to Sentry with contextual metadata for
  *   debugging and monitoring.
- * - Must be a Client Component (marked with "use client") as required by
- *   Next.js for error boundaries.
  *
  * @see https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts
  */
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
-  // Report error to Sentry on mount or when error changes
   useEffect(() => {
     Sentry.captureException(error, {
       tags: { errorBoundary: "global" },

@@ -39,15 +39,6 @@ const globalForPrisma = globalThis as unknown as {
  * - Enables HTTP-based database connections (no persistent TCP)
  * - Supports edge runtime environments (Vercel Edge, Cloudflare Workers)
  * - Provides automatic connection pooling via Neon's infrastructure
- *
- * @throws {Error} When DATABASE_URL environment variable is not set
- *
- * @example
- * // The client is created automatically via the singleton pattern.
- * // Direct usage is not recommended - use the default export instead.
- * import prisma from "@/lib/db";
- *
- * const workflows = await prisma.workflow.findMany();
  */
 const createPrismaClient = () => {
   const connectionString = process.env.DATABASE_URL;

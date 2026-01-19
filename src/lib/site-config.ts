@@ -16,10 +16,6 @@ const getBaseUrl = () => {
 
 /**
  * Central configuration object for the Nodebase application.
- *
- * @remarks
- * All values are immutable (`as const`) to ensure type safety
- * and prevent accidental modifications.
  */
 export const siteConfig = {
   /** Application name used in titles and branding */

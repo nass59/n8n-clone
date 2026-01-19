@@ -3,10 +3,6 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 type AuthLayoutProps = {
-  /**
-   * The authentication form content to render within the layout.
-   * Typically a login or signup form component.
-   */
   children: ReactNode;
 };
 
@@ -16,15 +12,6 @@ type AuthLayoutProps = {
  * Provides a centered, vertically-aligned container with the Nodebase logo
  * and consistent styling across all auth-related pages. Used by the `(auth)`
  * route group layout at `src/app/(auth)/layout.tsx`.
- *
- * @remarks
- * **Accessibility considerations:**
- * - The logo image uses `alt=""` because it's decorative; the adjacent text
- *   "Nodebase" provides the semantic meaning.
- *
- * **Layout behavior:**
- * - Uses `min-h-svh` (small viewport height) for proper mobile browser support,
- *   accounting for dynamic browser chrome (URL bar, etc.).
  */
 export const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (

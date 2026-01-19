@@ -20,16 +20,6 @@ export const viewport: Viewport = {
 
 /**
  * Global metadata configuration for SEO and social sharing.
- *
- * @remarks
- * - Uses title template so child pages can set `title: "Page Name"` and get "Page Name | Nodebase"
- * - `metadataBase` is required for absolute URLs in OG images and canonical links
- * - All values are sourced from `siteConfig` for consistency
- *
- * @example
- * export const metadata: Metadata = {
- *   title: "Workflows", // Renders as "Workflows | Nodebase"
- * };
  */
 export const metadata: Metadata = {
   title: {
@@ -71,12 +61,6 @@ type RootLayoutProps = Readonly<{
 
 /**
  * Root layout component defining the HTML document structure.
- *
- * @remarks
- * This component is intentionally minimal, focusing only on:
- * - HTML document structure (`<html>`, `<body>`)
- * - Font CSS variables application
- * - Language and accessibility attributes
  *
  * All client-side context providers are delegated to the `Providers` component,
  * keeping this layout as a pure Server Component.

@@ -14,11 +14,6 @@ type ProvidersProps = {
  * @remarks
  * This component establishes the client boundary (`"use client"`) for all providers.
  * The root layout remains a Server Component, keeping the provider logic encapsulated here.
- *
- * **Included providers:**
- * - `TRPCReactProvider`: Enables tRPC hooks with React Query for data fetching
- * - `NuqsAdapter`: Syncs URL search params with React state (used by nuqs)
- * - `Toaster`: Renders toast notifications (Sonner) at the viewport edge
  */
 export const Providers = ({ children }: ProvidersProps) => {
   return (
