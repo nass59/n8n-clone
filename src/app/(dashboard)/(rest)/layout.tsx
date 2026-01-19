@@ -1,7 +1,8 @@
+import type { ReactNode } from "react";
 import { AppHeader } from "@/components/app-header";
 
 type LayoutProps = {
-  children: React.ReactNode;
+  children: ReactNode;
 };
 
 export default function Layout({ children }: LayoutProps) {
