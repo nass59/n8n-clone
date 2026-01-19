@@ -1,12 +1,15 @@
+import { APP_ROUTES } from "@/lib/routes";
+
 /**
- * Authentication route paths.
- * Centralized route definitions for auth-related pages.
+ * Auth-specific route aliases.
+ * Maps generic route names to auth domain terminology.
  */
 export const AUTH_ROUTES = {
-  LOGIN: "/login",
-  SIGNUP: "/signup",
-  FORGOT_PASSWORD: "/forgot-password",
-  DASHBOARD: "/",
+  LOGIN: APP_ROUTES.LOGIN,
+  SIGNUP: APP_ROUTES.SIGNUP,
+  FORGOT_PASSWORD: APP_ROUTES.FORGOT_PASSWORD,
+  /** Where to redirect after successful authentication */
+  DASHBOARD: APP_ROUTES.HOME,
 } as const;
 
 /**
