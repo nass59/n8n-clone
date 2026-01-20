@@ -1,103 +1,69 @@
 import { generateSlug } from "random-word-slugs";
-import z from "zod";
-import { PAGINATION } from "@/config/constants";
-import prisma from "@/lib/db";
 import {
   createTRPCRouter,
   premiumProcedure,
   protectedProcedure,
 } from "@/trpc/init";
+import {
+  deleteWorkflowSchema,
+  getWorkflowSchema,
+  updateWorkflowNameSchema,
+  workflowsPaginationSchema,
+} from "./schemas";
+import {
+  createWorkflow,
+  deleteWorkflow,
+  getWorkflow,
+  getWorkflows,
+  updateWorkflowName,
+} from "./service";
 
 export const workflowsRouter = createTRPCRouter({
+  /**
+   * Creates a new workflow with a randomly generated name.
+   * Requires active premium subscription.
+   */
   create: premiumProcedure.mutation(({ ctx }) => {
-    return prisma.workflow.create({
-      data: {
-        name: generateSlug(3),
-        userId: ctx.auth.user.id,
-      },
-    });
+    return createWorkflow(ctx.auth.user.id, generateSlug(3));
   }),
+
+  /**
+   * Deletes a workflow by ID.
+   * Verifies ownership before deletion.
+   */
   remove: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(deleteWorkflowSchema)
     .mutation(({ ctx, input }) => {
-      return prisma.workflow.delete({
-        where: {
-          id: input.id,
-          userId: ctx.auth.user.id,
-        },
-      });
+      return deleteWorkflow(input, ctx.auth.user.id);
     }),
+
+  /**
+   * Updates a workflow's name.
+   * Verifies ownership before update.
+   */
   updateName: protectedProcedure
-    .input(z.object({ id: z.string(), name: z.string().min(1) }))
+    .input(updateWorkflowNameSchema)
     .mutation(({ ctx, input }) => {
-      return prisma.workflow.update({
-        where: { id: input.id, userId: ctx.auth.user.id },
-        data: { name: input.name },
-      });
+      return updateWorkflowName(input, ctx.auth.user.id);
     }),
+
+  /**
+   * Fetches a single workflow by ID.
+   * Throws NOT_FOUND if workflow doesn't exist or user doesn't own it.
+   */
   getOne: protectedProcedure
-    .input(z.object({ id: z.string() }))
+    .input(getWorkflowSchema)
     .query(({ ctx, input }) => {
-      return prisma.workflow.findUnique({
-        where: {
-          id: input.id,
-          userId: ctx.auth.user.id,
-        },
-      });
+      return getWorkflow(input, ctx.auth.user.id);
     }),
+
+  /**
+   * Fetches paginated workflows with optional search.
+   * Returns only workflows owned by the requesting user.
+   */
   getMany: protectedProcedure
-    .input(
-      z.object({
-        page: z.number().default(PAGINATION.DEFAULT_PAGE),
-        pageSize: z
-          .number()
-          .min(PAGINATION.MIN_PAGE_SIZE)
-          .max(PAGINATION.MAX_PAGE_SIZE)
-          .default(PAGINATION.DEFAULT_PAGE_SIZE),
-        search: z.string().default(""),
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const { page, pageSize, search } = input;
-
-      const [items, totalCount] = await Promise.all([
-        prisma.workflow.findMany({
-          skip: (page - 1) * pageSize,
-          take: pageSize,
-          where: {
-            userId: ctx.auth.user.id,
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-          orderBy: {
-            updatedAt: "desc",
-          },
-        }),
-        prisma.workflow.count({
-          where: {
-            userId: ctx.auth.user.id,
-            name: {
-              contains: search,
-              mode: "insensitive",
-            },
-          },
-        }),
-      ]);
-
-      const totalPages = Math.ceil(totalCount / pageSize);
-      const hasNextPage = page < totalPages;
-      const hasPreviousPage = page > 1;
-
-      return {
-        items,
-        page,
-        pageSize,
-        totalCount,
-        totalPages,
-        hasNextPage,
-        hasPreviousPage,
-      };
+    .input(workflowsPaginationSchema)
+    .query(({ ctx, input }) => {
+      return getWorkflows(input, ctx.auth.user.id);
     }),
 });
