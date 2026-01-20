@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import { PAGINATION } from "@/config/constants";
 
-type UseEntitySearchProps<T extends { search: string; page: number }> = {
+type ListParams = {
+  search: string;
+  page: number;
+};
+
+type UseListSearchOptions<T extends ListParams> = {
   params: T;
   setParams: (params: T) => void;
   debounceMs?: number;
 };
 
-export const useEntitySearch = <T extends { search: string; page: number }>({
+export const useListSearch = <T extends ListParams>({
   params,
   setParams,
   debounceMs = 500,
-}: UseEntitySearchProps<T>) => {
+}: UseListSearchOptions<T>) => {
   const [localSearch, setLocalSearch] = useState(params.search);
 
   useEffect(() => {

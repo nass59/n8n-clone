@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { EntityHeader } from "@/components/entity-components";
 import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
+import { ListHeader } from "@/modules/shared/components/list-view/list-header";
 import { useCreateWorkflow } from "../../hooks/use-workflows";
 
 /**
@@ -32,12 +32,12 @@ export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
   return (
     <>
       {modal}
-      <EntityHeader
+      <ListHeader
+        actionDisabled={disabled}
+        actionLabel="New workflow"
+        actionLoading={createWorkflow.isPending}
         description="Create and manage your workflows"
-        disabled={disabled}
-        isCreating={createWorkflow.isPending}
-        newButtonLabel="New workflow"
-        onNew={handleCreate}
+        onAction={handleCreate}
         title="Workflows"
       />
     </>

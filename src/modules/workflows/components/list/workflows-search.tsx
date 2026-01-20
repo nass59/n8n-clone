@@ -1,7 +1,7 @@
 "use client";
 
-import { EntitySearch } from "@/components/entity-components";
-import { useEntitySearch } from "@/hooks/use-entity-search";
+import { ListSearch } from "@/modules/shared/components/list-view/list-search";
+import { useListSearch } from "@/modules/shared/hooks/use-list-search";
 import { useWorkflowsParams } from "../../hooks/use-workflows-params";
 
 /**
@@ -13,13 +13,14 @@ import { useWorkflowsParams } from "../../hooks/use-workflows-params";
  */
 export const WorkflowSearch = () => {
   const [params, setParams] = useWorkflowsParams();
-  const { searchValue, onSearchChange } = useEntitySearch({
+  const { searchValue, onSearchChange } = useListSearch({
     params,
     setParams,
   });
 
   return (
-    <EntitySearch
+    <ListSearch
+      label="Search workflows"
       onChange={onSearchChange}
       placeholder="Search workflows"
       value={searchValue}

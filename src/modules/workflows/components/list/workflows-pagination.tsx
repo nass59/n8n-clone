@@ -1,6 +1,6 @@
 "use client";
 
-import { EntityPagination } from "@/components/entity-components";
+import { ListPagination } from "@/modules/shared/components/list-view/list-pagination";
 import { useSuspenseWorkflows } from "../../hooks/use-workflows";
 import { useWorkflowsParams } from "../../hooks/use-workflows-params";
 
@@ -16,7 +16,7 @@ export const WorkflowsPagination = () => {
   const [params, setParams] = useWorkflowsParams();
 
   return (
-    <EntityPagination
+    <ListPagination
       disabled={workflows.isFetching}
       onPageChange={(page) => setParams({ ...params, page })}
       page={workflows.data.page}
