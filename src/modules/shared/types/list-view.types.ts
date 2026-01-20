@@ -18,3 +18,7 @@ export type PaginatedResponse<T> = {
   totalPages: number;
   totalCount: number;
 };
+
+export type StateViewProps = {
+  message?: string;
+};

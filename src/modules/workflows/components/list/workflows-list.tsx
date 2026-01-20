@@ -1,5 +1,7 @@
 "use client";
 
+import { ListItems } from "@/modules/shared/components/list-view/list-items";
+import { WorkflowsEmpty } from "@/modules/workflows/components/list/workflows-empty";
 import { useSuspenseWorkflows } from "../../hooks/use-workflows";
 
 /**
@@ -18,8 +20,11 @@ export const WorkflowsList = () => {
   const workflows = useSuspenseWorkflows();
 
   return (
-    <div className="flex flex-1 items-center justify-center">
-      <code>{JSON.stringify(workflows.data, null, 2)}</code>
-    </div>
+    <ListItems
+      emptyView={<WorkflowsEmpty />}
+      getKey={(workflow) => workflow.id}
+      items={workflows.data.items}
+      renderItem={(workflow) => <p>{workflow.name}</p>}
+    />
   );
 };

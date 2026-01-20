@@ -26,7 +26,7 @@ export default async function Layout({ children }: LayoutProps) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="bg-accent/20">{children}</SidebarInset>
+      <SidebarInset className="bg-stone-900/40">{children}</SidebarInset>
     </SidebarProvider>
   );
 }
