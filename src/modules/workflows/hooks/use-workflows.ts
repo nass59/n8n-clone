@@ -4,8 +4,8 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useWorkflowsParams } from "@/modules/workflows/hooks/use-workflows-params";
 import { useTRPC } from "@/trpc/client";
+import { useWorkflowsParams } from "./use-workflows-params";
 
 /**
  * Hook to fetch all workflows using Suspense
@@ -21,8 +21,8 @@ export const useSuspenseWorkflows = () => {
  * Hook to create a new workflow
  */
 export const useCreateWorkflow = () => {
-  const queryClient = useQueryClient();
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
 
   return useMutation(
     trpc.workflows.create.mutationOptions({

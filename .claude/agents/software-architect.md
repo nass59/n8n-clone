@@ -29,3 +29,6 @@ Consider:
 2. Does this need premium gating? → Use `premiumProcedure`
 3. Does this touch workflow execution? → Must be idempotent, handle partial failures
 4. Does this need external credentials? → Use the Credential model, never store raw secrets
+
+# Remember
+- NEVER use barrel files

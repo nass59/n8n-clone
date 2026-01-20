@@ -1,10 +1,8 @@
 import type { SearchParams } from "nuqs/server";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import {
-  WorkflowsContainer,
-  WorkflowsList,
-} from "@/modules/workflows/components/workflows";
+import { WorkflowsContainer } from "@/modules/workflows/components/list/workflows-container";
+import { WorkflowsList } from "@/modules/workflows/components/list/workflows-list";
 import { workflowsParamsLoader } from "@/modules/workflows/server/params-loader";
 import { prefetchWorkflows } from "@/modules/workflows/server/prefetch";
 import { HydrateClient } from "@/trpc/server";
