@@ -8,11 +8,11 @@ export type ListPaginationProps = {
 };
 
 /**
- * A pagination control component for navigating through paginated lists.
- *
- * Displays the current page position ("Page X of Y") and Previous/Next buttons.
- * Automatically handles boundary conditions (disabling buttons on first/last page)
- * and ensures page numbers stay within valid bounds.
+ * PURPOSE: Page navigation for list views
+ * DISPLAY: Current page indicator + Previous/Next buttons
+ * BOUNDARY HANDLING: Disables buttons on first/last page, clamps page numbers
+ * ACCESSIBILITY: aria-labels on buttons + nav landmark
+ * USED BY: All paginated list pages
  */
 export const ListPagination = ({
   page,

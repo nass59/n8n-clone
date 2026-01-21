@@ -21,15 +21,10 @@ type ListHeaderProps = {
 );
 
 /**
- * A header component for list pages displaying a title, optional description,
- * and a primary action button.
- *
- * The action button supports two modes:
- * - **Navigation mode**: Pass `actionHref` to render as a prefetched Next.js link
- * - **Click handler mode**: Pass `onAction` to handle clicks (e.g., open a modal)
- *
- * The component uses a discriminated union type to ensure only one action mode
- * is specified at a time, providing type safety and preventing invalid prop combinations.
+ * PURPOSE: Page header with title, description, and action button
+ * ACTION MODES: navigationHref (Link) | onAction (click handler) | none
+ * TYPE SAFETY: Discriminated union prevents invalid prop combinations
+ * USED BY: All list pages - renders above search/items
  */
 export const ListHeader = (props: ListHeaderProps) => {
   const { title, description } = props;
@@ -67,11 +62,9 @@ type ListHeaderActionProps = {
 };
 
 /**
- * Internal action button component that renders either as a link or button.
- *
- * When `href` is provided, renders as a prefetched Next.js Link for optimal
- * navigation performance. Otherwise, renders as a standard button with
- * click handler support.
+ * PURPOSE: Internal action button - renders as Link or Button
+ * BEHAVIOR: Link renders with prefetch for optimal navigation
+ * INTERNAL: Private component, only used by ListHeader
  */
 const ListHeaderAction = ({
   label,

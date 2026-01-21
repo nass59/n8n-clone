@@ -1,6 +1,11 @@
 import { IconLoader2 } from "@tabler/icons-react";
 import type { StateViewProps } from "@/modules/shared/types/list-view.types";
 
+/**
+ * PURPOSE: Loading state placeholder for list views
+ * DISPLAY: Animated spinner + optional message
+ * USED BY: List pages while fetching data (paired with tRPC isLoading)
+ */
 export const ListLoading = ({ message }: StateViewProps) => {
   return (
     <div className="flex h-full flex-1 flex-col items-center justify-center gap-y-4">

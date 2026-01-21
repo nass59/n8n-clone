@@ -7,11 +7,10 @@ import { WorkflowsPagination } from "./workflows-pagination";
 import { WorkflowSearch } from "./workflows-search";
 
 /**
- * Container component for the workflows list page.
- *
- * Composes the workflows list layout by combining the header, search,
- * pagination, and content areas into a unified page structure using
- * the generic `ListContainer` component.
+ * PURPOSE: Layout wrapper for workflows list page
+ * RENDERS: ListContainer with header, search, pagination sections
+ * USED BY: app/workflows/page.tsx
+ * CHILDREN: WorkflowsList component
  */
 export const WorkflowsContainer = ({ children }: PropsWithChildren) => {
   return (

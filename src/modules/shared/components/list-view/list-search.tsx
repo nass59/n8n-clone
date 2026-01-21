@@ -16,18 +16,11 @@ export type ListSearchProps = {
 };
 
 /**
- * A search input component for filtering list content.
- *
- * Renders an accessible search input with a search icon. The input is
- * a controlled component that requires parent state management. It uses
- * `useId()` for generating unique IDs, ensuring proper label association
- * even when multiple instances exist on the same page.
- *
- * Features:
- * - Search icon indicator (non-interactive, properly hidden from assistive tech)
- * - Screen reader accessible label (visually hidden)
- * - Native search input type with browser clear button support
- * - Responsive width constraint (max-w-50)
+ * PURPOSE: Accessible search input for list filtering
+ * CONTROLLED: Requires parent state (value, onChange)
+ * ACCESSIBILITY: useId() + sr-only label for screen readers
+ * ICON: Search icon with aria-hidden for visual-only display
+ * USED BY: All list pages - typically paired with useListSearch hook
  */
 export const ListSearch = ({
   value,

@@ -1,6 +1,7 @@
 /**
- * Base parameters for paginated list views.
- * Extend this type for entity-specific params.
+ * PURPOSE: Base pagination params contract for all list views
+ * USAGE: Extend this type when creating entity-specific list params (e.g., WorkflowListParams)
+ * USED BY: All list views and tRPC list procedures
  */
 export type ListParams = {
   search: string;
@@ -9,7 +10,9 @@ export type ListParams = {
 };
 
 /**
- * Standard response shape for paginated data.
+ * PURPOSE: Standard paginated response shape
+ * GENERIC: T is the entity type (e.g., Workflow, Integration)
+ * USED BY: tRPC list procedures to return consistent pagination
  */
 export type PaginatedResponse<T> = {
   data: T[];
@@ -19,6 +22,10 @@ export type PaginatedResponse<T> = {
   totalCount: number;
 };
 
+/**
+ * PURPOSE: Props for state view components (loading, error, empty)
+ * FIELDS: message - optional user-facing text describing the state
+ */
 export type StateViewProps = {
   message?: string;
 };

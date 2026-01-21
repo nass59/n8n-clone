@@ -13,10 +13,9 @@ import { siteConfig } from "@/lib/site-config";
 const LOGO_SIZE = 30;
 
 /**
- * Displays the application brand in the sidebar header.
- *
- * Renders the logo and application name from `siteConfig`, linking to
- * the home page. Adapts to collapsed sidebar state via SidebarMenuButton.
+ * PURPOSE: Render app logo and name in sidebar header, linking to home
+ * RENDERS: Logo image + app name from siteConfig
+ * DEPENDS: siteConfig for branding info
  */
 export const SidebarBrand = () => {
   return (

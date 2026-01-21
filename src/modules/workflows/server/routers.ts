@@ -18,18 +18,27 @@ import {
   updateWorkflowName,
 } from "./service";
 
+/**
+ * PURPOSE: tRPC router for workflow operations
+ * PURE: No (DB and auth context)
+ * AUTH: protectedProcedure (except create uses premiumProcedure)
+ * PROCEDURES: create, getMany, getOne, updateName, remove
+ * DEPENDS: @/trpc/init, ./schemas, ./service
+ */
 export const workflowsRouter = createTRPCRouter({
   /**
-   * Creates a new workflow with a randomly generated name.
-   * Requires active premium subscription.
+   * PURPOSE: Create workflow with random name for premium users
+   * PURE: No (DB write)
+   * AUTH: premiumProcedure (requires active subscription)
    */
   create: premiumProcedure.mutation(({ ctx }) => {
     return createWorkflow(ctx.auth.user.id, generateSlug(3));
   }),
 
   /**
-   * Deletes a workflow by ID.
-   * Verifies ownership before deletion.
+   * PURPOSE: Delete workflow with ownership check
+   * PURE: No (DB write)
+   * AUTH: protectedProcedure
    */
   remove: protectedProcedure
     .input(deleteWorkflowSchema)
@@ -38,8 +47,9 @@ export const workflowsRouter = createTRPCRouter({
     }),
 
   /**
-   * Updates a workflow's name.
-   * Verifies ownership before update.
+   * PURPOSE: Update workflow name with ownership check
+   * PURE: No (DB write)
+   * AUTH: protectedProcedure
    */
   updateName: protectedProcedure
     .input(updateWorkflowNameSchema)
@@ -48,8 +58,10 @@ export const workflowsRouter = createTRPCRouter({
     }),
 
   /**
-   * Fetches a single workflow by ID.
-   * Throws NOT_FOUND if workflow doesn't exist or user doesn't own it.
+   * PURPOSE: Fetch single workflow
+   * PURE: No (DB read)
+   * AUTH: protectedProcedure
+   * THROWS: NOT_FOUND if not found or unauthorized
    */
   getOne: protectedProcedure
     .input(getWorkflowSchema)
@@ -58,8 +70,9 @@ export const workflowsRouter = createTRPCRouter({
     }),
 
   /**
-   * Fetches paginated workflows with optional search.
-   * Returns only workflows owned by the requesting user.
+   * PURPOSE: Fetch paginated workflows with search
+   * PURE: No (DB read)
+   * AUTH: protectedProcedure
    */
   getMany: protectedProcedure
     .input(workflowsPaginationSchema)

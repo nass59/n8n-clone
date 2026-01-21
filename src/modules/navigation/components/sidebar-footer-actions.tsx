@@ -12,23 +12,14 @@ import { APP_ROUTES } from "@/lib/routes";
 import { useHasActiveSubscription } from "@/modules/subscriptions/hooks/use-subscription";
 
 /**
- * Renders action buttons in the sidebar footer for account management.
- *
- * Displays conditional content based on subscription status:
- * - Upgrade to Pro button (only shown to free users)
- * - Billing Portal link (opens Polar customer portal)
- * - Sign Out button (clears session and redirects to login)
- *
- * Uses Better Auth client for authentication and Polar integration
- * for subscription management via authClient.checkout and authClient.customer.portal.
+ * PURPOSE: Render account/billing actions in sidebar footer with subscription gating
+ * RENDERS: Conditional upgrade button, billing portal link, sign out button
+ * DEPENDS: authClient (Better Auth), useHasActiveSubscription hook, Polar integration
  */
 export const SidebarFooterActions = () => {
   const router = useRouter();
   const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
 
-  /**
-   * Signs out the current user and redirects to login page.
-   */
   const handleSignOut = () => {
     authClient.signOut({
       fetchOptions: {

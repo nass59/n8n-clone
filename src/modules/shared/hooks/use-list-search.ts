@@ -12,6 +12,13 @@ type UseListSearchOptions<T extends ListParams> = {
   debounceMs?: number;
 };
 
+/**
+ * PURPOSE: Debounced search input with pagination reset
+ * BEHAVIOR: Debounces search input 500ms, resets to page 1 on search change
+ * GENERIC: T extends ListParams - works with any params type
+ * RETURNS: { searchValue, onSearchChange } for controlled ListSearch component
+ * USED BY: All list pages - bridges ListSearch component to tRPC queries
+ */
 export const useListSearch = <T extends ListParams>({
   params,
   setParams,

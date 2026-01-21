@@ -5,11 +5,11 @@ import { useListSearch } from "@/modules/shared/hooks/use-list-search";
 import { useWorkflowsParams } from "../../hooks/use-workflows-params";
 
 /**
- * Search input for filtering workflows by name.
- *
- * Provides a debounced search input that updates the `search` URL parameter.
- * Changes trigger a re-fetch of the workflows list filtered by the search term.
- * Also resets pagination to page 1 when search value changes.
+ * PURPOSE: Debounced search input to filter workflows by name
+ * RENDERS: ListSearch input with placeholder
+ * USED BY: WorkflowsContainer as search section
+ * ACTIONS: Update search URL param, reset page to 1
+ * DEPENDS: useWorkflowsParams, useListSearch (debounce + pagination reset)
  */
 export const WorkflowSearch = () => {
   const [params, setParams] = useWorkflowsParams();

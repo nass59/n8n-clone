@@ -6,12 +6,11 @@ import { ListHeader } from "@/modules/shared/components/list-view/list-header";
 import { useCreateWorkflow } from "../../hooks/use-workflows";
 
 /**
- * Header component for the workflows list page.
- *
- * Displays the page title, description, and a "New workflow" button.
- * Handles workflow creation via tRPC mutation and navigates to the
- * new workflow's editor page on success. Shows an upgrade modal if
- * the user hits their subscription limits.
+ * PURPOSE: Page header with "New workflow" button
+ * RENDERS: Title, description, create button with loading state
+ * USED BY: WorkflowsContainer as header section
+ * ACTIONS: Create workflow → navigate to editor, show upgrade modal on error
+ * DEPENDS: useCreateWorkflow, useUpgradeModal, useRouter
  */
 export const WorkflowsHeader = ({ disabled }: { disabled?: boolean }) => {
   const router = useRouter();

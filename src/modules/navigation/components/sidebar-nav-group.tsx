@@ -13,11 +13,9 @@ type SidebarNavGroupProps = {
 };
 
 /**
- * Renders a logical group of navigation items in the sidebar.
- *
- * Wraps multiple SidebarNavItemComponents in a SidebarGroup container.
- * Each group represents a related set of navigation destinations
- * (e.g., Workflows, Credentials, Executions).
+ * PURPOSE: Render grouped navigation items with layout containers
+ * RENDERS: SidebarGroup wrapping SidebarMenu with SidebarNavItemComponent children
+ * USES: SidebarNavGroup type for structure, SidebarNavItemComponent for items
  */
 export const SidebarNavGroupComponent = ({ group }: SidebarNavGroupProps) => {
   return (

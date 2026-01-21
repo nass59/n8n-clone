@@ -7,14 +7,10 @@ export type ListContainerProps = PropsWithChildren<{
 }>;
 
 /**
- * A reusable layout container for list pages in Nodebase.
- *
- * Provides a consistent, responsive structure for displaying paginated lists
- * of resources (workflows, integrations, etc.) with a header, search, and
- * pagination. The container handles responsive padding and max-width constraints.
- *
- * This component uses a slot-based composition pattern, allowing each section
- * to be customized or omitted as needed.
+ * PURPOSE: Responsive layout container for list pages
+ * COMPOSITION: Slot-based - header, search, items (children), pagination
+ * RENDERS: Responsive grid with max-width-7xl, responsive padding
+ * USED BY: All list pages (workflows, integrations, etc.)
  */
 export const ListContainer = ({
   children,

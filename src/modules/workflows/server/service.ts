@@ -8,9 +8,13 @@ import type {
 } from "./schemas";
 
 /**
- * Optimized field selection for workflow queries.
- * Explicitly select fields to reduce payload size and prevent over-fetching.
+ * PURPOSE: Business logic for workflow CRUD and pagination
+ * PURE: No (DB read/write)
+ * EXPORTS: createWorkflow, getWorkflow, getWorkflows, updateWorkflowName, deleteWorkflow
+ * USED BY: routers.ts (tRPC procedures)
+ * PATTERN: All mutations verify userId ownership before modifying
  */
+
 const workflowSelect = {
   id: true,
   name: true,
@@ -20,36 +24,26 @@ const workflowSelect = {
 } as const;
 
 /**
- * Creates a workflow for a user.
- *
- * @param userId - The ID of the user creating the workflow
- * @param name - The generated workflow name
- * @returns The created workflow
+ * PURPOSE: Create workflow for user
+ * PURE: No (DB)
+ * USED BY: routers.ts create procedure
  */
 export const createWorkflow = (userId: string, name: string) => {
   return prisma.workflow.create({
-    data: {
-      name,
-      userId,
-    },
+    data: { name, userId },
     select: workflowSelect,
   });
 };
 
 /**
- * Fetches a single workflow by ID with ownership verification.
- *
- * @param input - Workflow ID to fetch
- * @param userId - ID of the requesting user
- * @returns The workflow if found and owned by user
- * @throws {TRPCError} NOT_FOUND if workflow doesn't exist or user doesn't own it
+ * PURPOSE: Fetch single workflow with ownership check
+ * PURE: No (DB)
+ * THROWS: NOT_FOUND if id doesn't exist or userId mismatch
+ * USED BY: getWorkflows, updateWorkflowName, deleteWorkflow (ownership gate)
  */
 export const getWorkflow = async (input: GetWorkflowInput, userId: string) => {
   const workflow = await prisma.workflow.findFirst({
-    where: {
-      id: input.id,
-      userId,
-    },
+    where: { id: input.id, userId },
     select: workflowSelect,
   });
 
@@ -64,11 +58,11 @@ export const getWorkflow = async (input: GetWorkflowInput, userId: string) => {
 };
 
 /**
- * Fetches paginated workflows for a user with optional search.
- *
- * @param input - Pagination and search parameters
- * @param userId - ID of the requesting user
- * @returns Paginated workflow results with metadata
+ * PURPOSE: Fetch paginated workflows with optional search filter
+ * PURE: No (DB)
+ * INPUT: page, pageSize (validated in schemas), search (case-insensitive name match)
+ * OUTPUT: items array, pagination metadata (page, totalCount, totalPages, hasNextPage, hasPreviousPage)
+ * USED BY: routers.ts getMany procedure
  */
 export const getWorkflows = async (
   input: WorkflowsPaginationInput,
@@ -79,10 +73,7 @@ export const getWorkflows = async (
   const where = {
     userId,
     ...(search && {
-      name: {
-        contains: search,
-        mode: "insensitive" as const,
-      },
+      name: { contains: search, mode: "insensitive" as const },
     }),
   };
 
@@ -92,9 +83,7 @@ export const getWorkflows = async (
       take: pageSize,
       where,
       select: workflowSelect,
-      orderBy: {
-        updatedAt: "desc",
-      },
+      orderBy: { updatedAt: "desc" },
     }),
     prisma.workflow.count({ where }),
   ]);
@@ -113,18 +102,15 @@ export const getWorkflows = async (
 };
 
 /**
- * Updates a workflow's name with ownership verification.
- *
- * @param input - Workflow ID and new name
- * @param userId - ID of the requesting user
- * @returns The updated workflow
- * @throws {TRPCError} NOT_FOUND if workflow doesn't exist or user doesn't own it
+ * PURPOSE: Update workflow name with ownership verification
+ * PURE: No (DB)
+ * THROWS: NOT_FOUND if workflow doesn't exist or user doesn't own it
+ * USED BY: routers.ts updateName procedure
  */
 export const updateWorkflowName = async (
   input: UpdateWorkflowNameInput,
   userId: string
 ) => {
-  // Verify ownership first - throws NOT_FOUND if unauthorized
   await getWorkflow({ id: input.id }, userId);
 
   return prisma.workflow.update({
@@ -135,18 +121,15 @@ export const updateWorkflowName = async (
 };
 
 /**
- * Deletes a workflow with ownership verification.
- *
- * @param input - Workflow ID to delete
- * @param userId - ID of the requesting user
- * @returns The deleted workflow
- * @throws {TRPCError} NOT_FOUND if workflow doesn't exist or user doesn't own it
+ * PURPOSE: Delete workflow with ownership verification
+ * PURE: No (DB)
+ * THROWS: NOT_FOUND if workflow doesn't exist or user doesn't own it
+ * USED BY: routers.ts remove procedure
  */
 export const deleteWorkflow = async (
   input: DeleteWorkflowInput,
   userId: string
 ) => {
-  // Verify ownership first - throws NOT_FOUND if unauthorized
   await getWorkflow({ id: input.id }, userId);
 
   return prisma.workflow.delete({

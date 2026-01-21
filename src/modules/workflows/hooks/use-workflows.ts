@@ -8,7 +8,11 @@ import { useTRPC } from "@/trpc/client";
 import { useWorkflowsParams } from "./use-workflows-params";
 
 /**
- * Hook to fetch all workflows using Suspense
+ * PURPOSE: Fetch workflows with suspense, respecting URL search params
+ * PURE: No (tRPC query, URL read)
+ * RETURNS: SuspenseQuery result with data.items, data.page, data.totalPages, etc.
+ * USED BY: WorkflowsList, WorkflowsPagination components
+ * DEPENDS: useWorkflowsParams for page/pageSize/search
  */
 export const useSuspenseWorkflows = () => {
   const trpc = useTRPC();
@@ -18,7 +22,11 @@ export const useSuspenseWorkflows = () => {
 };
 
 /**
- * Hook to create a new workflow
+ * PURPOSE: Create new workflow with toast notifications
+ * PURE: No (tRPC mutation, UI side effects)
+ * RETURNS: UseMutation with mutate callback
+ * USED BY: WorkflowsHeader, WorkflowsEmpty components
+ * SIDE EFFECTS: Shows toast, invalidates getMany query cache
  */
 export const useCreateWorkflow = () => {
   const trpc = useTRPC();

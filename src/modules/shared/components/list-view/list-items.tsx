@@ -9,6 +9,13 @@ type ListItemsProps<T> = {
   className?: string;
 };
 
+/**
+ * PURPOSE: Generic list container with render prop pattern
+ * GENERIC: T is the item entity type
+ * RENDER PROPS: renderItem - called for each item; getKey - optional custom key fn
+ * FALLBACK: Shows emptyView when items.length === 0
+ * USED BY: Workflows, integrations, and other entity list pages
+ */
 export const ListItems = <T,>({
   items,
   renderItem,

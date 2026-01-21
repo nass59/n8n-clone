@@ -11,11 +11,9 @@ type SidebarNavItemProps = {
 };
 
 /**
- * Determines if a navigation item should be marked as active based on URL matching.
- *
- * Uses exact matching for the home route to prevent it from being active on
- * all pages. All other routes use prefix matching so nested pages (e.g.,
- * `/workflows/123`) highlight their parent nav item.
+ * PURPOSE: Determine active state using exact match for home, prefix match for other routes
+ * INPUT: url (nav item path), pathname (current route)
+ * OUTPUT: boolean active state
  */
 const isItemActive = (url: string, pathname: string): boolean => {
   if (url === APP_ROUTES.HOME) {
@@ -26,10 +24,9 @@ const isItemActive = (url: string, pathname: string): boolean => {
 };
 
 /**
- * Renders a single clickable navigation item in the sidebar.
- *
- * Handles active state highlighting based on current route and renders
- * the item's icon and title. Supports tooltip display when sidebar is collapsed.
+ * PURPOSE: Render single sidebar nav item with active state and icon
+ * RENDERS: Link with active highlight, icon, and title from SidebarNavItem
+ * USES: usePathname for active state detection, isItemActive helper
  */
 export const SidebarNavItemComponent = ({ item }: SidebarNavItemProps) => {
   const pathname = usePathname();

@@ -38,6 +38,7 @@ Use this exact structure for all documentation:
 3. **Always specify purity** — Agents need to know side effects
 4. **Skip obvious things** — Don't document what the code clearly shows
 5. **One line per field** — No multi-line descriptions
+6. **Never** create a README.md after documenting code files
 
 ## Examples
 
