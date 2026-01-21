@@ -1,3 +1,11 @@
+/**
+ * PURPOSE: OAuth sign-in buttons (GitHub, Google)
+ * PURE: No (authClient.signIn.social side effect, redirect)
+ * RENDERS: Two buttons (GitHub + Google)
+ * USED BY: login-form.tsx, register-form.tsx
+ * DEPENDS: authClient, OAUTH_PROVIDERS constant
+ */
+
 "use client";
 
 import Image from "next/image";
@@ -12,18 +20,6 @@ type OAuthButtonsProps = {
   disabled?: boolean;
 };
 
-/**
- * OAuth authentication buttons for GitHub and Google sign-in.
- *
- * Handles third-party authentication flow using Better Auth's social provider integration.
- * Displays toast notifications on success/failure and redirects on successful authentication.
- *
- * @remarks
- * - Uses Better Auth's `signIn.social()` method
- * - Redirects to "/" on successful authentication
- * - Shows error toast if authentication fails
- * - Providers configured in OAUTH_PROVIDERS constant
- */
 export const OAuthButtons = ({ disabled }: OAuthButtonsProps) => {
   const router = useRouter();
 

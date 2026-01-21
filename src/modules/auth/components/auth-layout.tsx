@@ -1,3 +1,9 @@
+/**
+ * PURPOSE: Shared layout wrapper for all auth pages (login, signup, forgot-password)
+ * RENDERS: Centered container with logo + children, responsive
+ * USED BY: src/app/(auth)/layout.tsx
+ */
+
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -6,13 +12,6 @@ type AuthLayoutProps = {
   children: ReactNode;
 };
 
-/**
- * Shared layout wrapper for authentication pages (login, signup, etc.).
- *
- * Provides a centered, vertically-aligned container with the Nodebase logo
- * and consistent styling across all auth-related pages. Used by the `(auth)`
- * route group layout at `src/app/(auth)/layout.tsx`.
- */
 export const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">

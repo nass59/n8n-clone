@@ -1,3 +1,16 @@
+/**
+ * PURPOSE: Email/password registration form with OAuth options
+ * PURE: No (authClient.signUp.email side effect, redirect)
+ * USED BY: src/app/(auth)/signup/page.tsx
+ * DEPENDS: authClient, registerSchema, AuthCard, PasswordInput, OAuthButtons
+ * FLOW:
+ *   1. User enters email, password, confirmPassword
+ *   2. Validates with registerSchema (enforces strength + match)
+ *   3. Calls authClient.signUp.email()
+ *   4. Success: Router redirects to "/"
+ *   5. Error: Shows toast with error message
+ */
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,31 +36,6 @@ import { AuthCard } from "./auth-card";
 import { OAuthButtons } from "./oauth-buttons";
 import { PasswordInput } from "./password-input";
 
-/**
- * User registration form with email/password and OAuth options.
- *
- * Handles new user signup through Better Auth, supporting both
- * traditional email/password registration and OAuth providers (GitHub, Google).
- *
- * @remarks
- * **Features:**
- * - Email/password registration
- * - OAuth (GitHub, Google)
- * - Password strength validation
- * - Password confirmation matching
- * - Password visibility toggle
- * - Form validation with Zod
- * - Auto-redirect on success
- * - Error toast notifications
- * - Proper autocomplete attributes
- *
- * **Flow:**
- * 1. User enters email, password, and confirmation
- * 2. Form validates with registerSchema
- * 3. Calls authClient.signUp.email()
- * 4. On success: Redirects to dashboard ("/")
- * 5. On error: Shows error toast
- */
 export const RegisterForm = () => {
   const router = useRouter();
 

@@ -1,3 +1,16 @@
+/**
+ * PURPOSE: Email/password login form with OAuth options
+ * PURE: No (authClient.signIn.email side effect, redirect)
+ * USED BY: src/app/(auth)/login/page.tsx
+ * DEPENDS: authClient, loginSchema, AuthCard, PasswordInput, OAuthButtons
+ * FLOW:
+ *   1. User enters email + password
+ *   2. Validates with loginSchema (no strength check)
+ *   3. Calls authClient.signIn.email()
+ *   4. Success: Router redirects to "/"
+ *   5. Error: Shows toast with error message
+ */
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,30 +36,6 @@ import { AuthCard } from "./auth-card";
 import { OAuthButtons } from "./oauth-buttons";
 import { PasswordInput } from "./password-input";
 
-/**
- * User login form with email/password and OAuth options.
- *
- * Handles authentication through Better Auth, supporting both
- * traditional email/password login and OAuth providers (GitHub, Google).
- *
- * @remarks
- * **Features:**
- * - Email/password authentication
- * - OAuth (GitHub, Google)
- * - Password visibility toggle
- * - "Forgot password?" link
- * - Form validation with Zod
- * - Auto-redirect on success
- * - Error toast notifications
- * - Proper autocomplete attributes
- *
- * **Flow:**
- * 1. User enters credentials
- * 2. Form validates with loginSchema
- * 3. Calls authClient.signIn.email()
- * 4. On success: Redirects to dashboard ("/")
- * 5. On error: Shows error toast
- */
 export const LoginForm = () => {
   const router = useRouter();
 

@@ -1,3 +1,9 @@
+/**
+ * PURPOSE: Card wrapper for auth forms (login, signup, etc.)
+ * RENDERS: Card with header (title + description) and content slot
+ * USED BY: login-form.tsx, register-form.tsx
+ */
+
 import type { PropsWithChildren } from "react";
 import {
   Card,
@@ -12,12 +18,6 @@ type AuthCardProps = PropsWithChildren<{
   description: string;
 }>;
 
-/**
- * A reusable card wrapper for authentication forms.
- *
- * Provides consistent styling and layout for login, signup,
- * and other auth-related forms.
- */
 export const AuthCard = ({ title, description, children }: AuthCardProps) => {
   return (
     <div className="flex flex-col gap-6">

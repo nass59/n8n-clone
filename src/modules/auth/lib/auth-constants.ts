@@ -1,20 +1,25 @@
+/**
+ * PURPOSE: Auth module constants (routes, OAuth config, password rules)
+ * PURE: Yes (const definitions)
+ * USED BY: login-form.tsx, register-form.tsx, oauth-buttons.tsx, auth-schemas.ts
+ */
+
 import { APP_ROUTES } from "@/lib/routes";
 
 /**
- * Auth-specific route aliases.
- * Maps generic route names to auth domain terminology.
+ * Auth route mappings.
+ * DASHBOARD: post-auth redirect destination
  */
 export const AUTH_ROUTES = {
   LOGIN: APP_ROUTES.LOGIN,
   SIGNUP: APP_ROUTES.SIGNUP,
   FORGOT_PASSWORD: APP_ROUTES.FORGOT_PASSWORD,
-  /** Where to redirect after successful authentication */
   DASHBOARD: APP_ROUTES.HOME,
 } as const;
 
 /**
- * OAuth provider configuration.
- * Defines display names and logo paths for supported OAuth providers.
+ * OAuth provider metadata (names, logo paths).
+ * Currently: GitHub, Google
  */
 export const OAUTH_PROVIDERS = {
   GITHUB: {
@@ -28,8 +33,9 @@ export const OAUTH_PROVIDERS = {
 } as const;
 
 /**
- * Password strength requirements and validation messages.
- * Used by the registration schema to enforce strong passwords.
+ * Password strength requirements for registration.
+ * Min 8 chars, uppercase, lowercase, number.
+ * Used by registerSchema in auth-schemas.ts
  */
 export const PASSWORD_REQUIREMENTS = {
   MIN_LENGTH: 8,

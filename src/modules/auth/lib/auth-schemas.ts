@@ -1,23 +1,17 @@
+/**
+ * PURPOSE: Zod validation schemas for auth forms
+ * PURE: Yes (schema definitions only)
+ * USED BY: login-form.tsx, register-form.tsx
+ * DEPENDS: PASSWORD_REQUIREMENTS constant
+ */
+
 import z from "zod";
 import { PASSWORD_REQUIREMENTS } from "./auth-constants";
 
-/**
- * Email validation schema.
- * Ensures the email is non-empty and in valid format.
- */
 const emailSchema = z
   .email("Invalid email address")
   .min(1, "Email is required");
 
-/**
- * Strong password validation schema.
- *
- * Enforces password complexity requirements:
- * - Minimum 8 characters
- * - At least one uppercase letter (A-Z)
- * - At least one lowercase letter (a-z)
- * - At least one number (0-9)
- */
 const passwordSchema = z
   .string()
   .min(
@@ -29,10 +23,8 @@ const passwordSchema = z
   .regex(/[0-9]/, PASSWORD_REQUIREMENTS.MESSAGES.NUMBER);
 
 /**
- * Login form validation schema.
- *
- * Validates user credentials for authentication.
- * Password strength is NOT enforced on login (only checks non-empty).
+ * Login validation schema.
+ * Checks non-empty email and password (no strength enforcement).
  */
 export const loginSchema = z.object({
   email: emailSchema,
@@ -40,14 +32,9 @@ export const loginSchema = z.object({
 });
 
 /**
- * Registration form validation schema.
- *
- * Validates new user signup with strong password requirements
- * and confirmation matching.
- *
- * @remarks
- * Uses `.refine()` to validate that password and confirmPassword match.
- * Error is attached to the confirmPassword field path.
+ * Registration validation schema.
+ * Enforces strong passwords + confirmation matching.
+ * Uses .refine() to validate password === confirmPassword.
  */
 export const registerSchema = z
   .object({

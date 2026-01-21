@@ -1,17 +1,23 @@
 /**
- * Supported OAuth providers for authentication.
+ * PURPOSE: Type definitions for auth module
+ * PURE: Yes (type-only)
+ */
+
+/**
+ * OAuth provider identifier.
+ * Supported providers: GitHub, Google
  */
 export type OAuthProvider = "github" | "google";
 
 /**
- * Authentication form type discriminator.
- * Used for conditional rendering or analytics tracking.
+ * Auth form type discriminator.
+ * Used by UI components to differentiate login vs registration
  */
 export type AuthFormType = "login" | "register";
 
 /**
  * Login form data structure.
- * Validated by {@link loginSchema}.
+ * Validated by loginSchema
  */
 export type LoginFormValues = {
   email: string;
@@ -20,10 +26,8 @@ export type LoginFormValues = {
 
 /**
  * Registration form data structure.
- * Validated by {@link registerSchema}.
- *
- * @remarks
- * Password must meet strength requirements defined in {@link PASSWORD_REQUIREMENTS}.
+ * Validated by registerSchema
+ * Password must pass strength requirements (8+ chars, uppercase, lowercase, number)
  */
 export type RegisterFormValues = {
   email: string;

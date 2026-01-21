@@ -1,3 +1,10 @@
+/**
+ * PURPOSE: Password input with show/hide toggle
+ * RENDERS: Input field (password/text type) + eye icon button
+ * USED BY: login-form.tsx, register-form.tsx
+ * ACCESSIBILITY: aria-label for toggle button
+ */
+
 "use client";
 
 import { IconEye, IconEyeOff } from "@tabler/icons-react";
@@ -6,18 +13,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-/**
- * Props for the PasswordInput component.
- * Extends native HTML input attributes.
- */
 type PasswordInputProps = ComponentProps<"input">;
 
-/**
- * An enhanced password input field with visibility toggle.
- *
- * Provides a toggle button to show/hide password text, improving UX
- * while maintaining security. Includes proper accessibility attributes.
- */
 export const PasswordInput = ({ ref, ...props }: PasswordInputProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
