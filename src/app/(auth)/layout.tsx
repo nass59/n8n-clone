@@ -6,11 +6,8 @@ type AuthLayoutProps = {
 };
 
 /**
- * Layout wrapper for the (auth) route group.
- *
- * This layout applies to all authentication-related pages (login, signup)
- * using Next.js App Router's route group convention. The parentheses in
- * `(auth)` create a logical grouping without affecting the URL structure.
+ * PURPOSE: Layout for auth route group (login, signup)
+ * RENDERS: AuthLayout wrapper around child pages
  */
 export default function Layout({ children }: AuthLayoutProps) {
   return <AuthLayout>{children}</AuthLayout>;

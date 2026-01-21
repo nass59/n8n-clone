@@ -3,39 +3,15 @@
 import * as Sentry from "@sentry/nextjs";
 import { useEffect } from "react";
 
-/**
- * @see https://nextjs.org/docs/app/api-reference/file-conventions/error#props
- */
 type GlobalErrorProps = {
-  /**
-   * The error that was thrown. Includes an optional `digest` property
-   * which is a hash of the error generated during server-side rendering,
-   * useful for matching errors in server logs.
-   */
   error: Error & { digest?: string };
-  /**
-   * Function to attempt recovery by re-rendering the root layout.
-   * Calling this will try to render the application again, which may
-   * succeed if the error was caused by a transient issue.
-   */
   reset: () => void;
 };
 
 /**
- * Global error boundary for the Next.js App Router application.
- *
- * This component catches unhandled errors at the root level, including errors
- * in the root layout. It replaces the entire document (including `<html>` and
- * `<body>` tags) when an error occurs, providing a fallback UI.
- *
- * @remarks
- * - Uses inline styles instead of Tailwind/CSS because stylesheets may fail
- *   to load when a critical error occurs at the root level. Inline styles
- *   ensure the error UI renders correctly regardless of CSS availability.
- * - Automatically reports errors to Sentry with contextual metadata for
- *   debugging and monitoring.
- *
- * @see https://nextjs.org/docs/app/building-your-application/routing/error-handling#handling-errors-in-root-layouts
+ * PURPOSE: Root-level error boundary for unhandled errors
+ * RENDERS: Error UI with recovery button, uses inline styles for CSS-independent rendering
+ * PURE: No (Sentry event, side effects via useEffect)
  */
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   useEffect(() => {

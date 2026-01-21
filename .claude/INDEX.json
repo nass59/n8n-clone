@@ -1,0 +1,109 @@
+{
+  "$schema": "Schema for AI agent navigation. Read this before exploring the codebase.",
+  "version": "1.0",
+  "updated": "2026-01-21",
+  "entryPoints": {
+    "app": "src/app/",
+    "api": "src/app/api/",
+    "trpc": "src/trpc/routers/_app.ts",
+    "database": "prisma/schema.prisma",
+    "auth": "src/lib/auth.ts"
+  },
+  "modules": {
+    "auth": {
+      "path": "src/modules/auth",
+      "purpose": "Authentication UI components and utilities",
+      "exports": [
+        "AuthCard",
+        "AuthLayout",
+        "LoginForm",
+        "OAuthButtons",
+        "PasswordInput",
+        "RegisterForm"
+      ]
+    },
+    "navigation": {
+      "path": "src/modules/navigation",
+      "purpose": "Sidebar and navigation components",
+      "exports": [
+        "SidebarBrand",
+        "SidebarFooterActions",
+        "SidebarNavGroupComponent",
+        "SidebarNavItemComponent"
+      ]
+    },
+    "workflows": {
+      "path": "src/modules/workflows",
+      "purpose": "Core workflow CRUD and list views",
+      "server": {
+        "router": "server/routers.ts",
+        "service": "server/service.ts",
+        "schemas": "server/schemas.ts"
+      },
+      "exports": [
+        "WorkflowSearch",
+        "WorkflowsContainer",
+        "WorkflowsEmpty",
+        "WorkflowsError",
+        "WorkflowsHeader",
+        "WorkflowsList",
+        "WorkflowsLoading",
+        "WorkflowsPagination"
+      ]
+    },
+    "shared": {
+      "path": "src/modules/shared",
+      "purpose": "Reusable components across modules",
+      "exports": [
+        "ListContainer",
+        "ListEmpty",
+        "ListError",
+        "ListHeader",
+        "ListItem",
+        "ListItems",
+        "ListLoading",
+        "ListPagination",
+        "ListSearch"
+      ]
+    },
+    "subscriptions": {
+      "path": "src/modules/subscriptions",
+      "purpose": "Subscription management and hooks",
+      "exports": []
+    }
+  },
+  "lib": {
+    "routes.ts": "routes utilities",
+    "auth-utils.ts": "requireAuth, requireUnauth guards",
+    "fonts.ts": "fonts utilities",
+    "utils.ts": "cn() and shared utilities",
+    "site-config.ts": "site-config utilities",
+    "db.ts": "Prisma client instance",
+    "auth.ts": "Better Auth server instance",
+    "auth-client.ts": "Better Auth React client",
+    "polar.ts": "Polar subscription client"
+  },
+  "routes": {
+    "api:api/auth/[...all]": "Better Auth routes",
+    "api:api/trpc/[trpc]": "tRPC HTTP handler",
+    "api:api/inngest": "Inngest webhook",
+    "api:api/sentry-example-api": "sentry-example-api",
+    "(auth)/signup": "Signup page",
+    "(auth)/login": "Login page",
+    "(dashboard)/(rest)/workflows": "workflows",
+    "(dashboard)/(rest)/executions/[executionId]": "[executionId]",
+    "(dashboard)/(rest)/executions": "executions",
+    "(dashboard)/(rest)/credentials/[credentialId]": "[credentialId]",
+    "(dashboard)/(rest)/credentials": "credentials",
+    "(dashboard)/(editor)/workflows/[workflowId]": "[workflowId]"
+  },
+  "filePatterns": {
+    "component": "src/modules/{module}/components/**/*.tsx",
+    "hook": "src/modules/{module}/hooks/use-*.ts",
+    "serverLogic": "src/modules/{module}/server/*.ts",
+    "types": "src/modules/{module}/types/*.types.ts",
+    "page": "src/app/**/page.tsx",
+    "apiRoute": "src/app/api/**/route.ts",
+    "uiPrimitive": "src/components/ui/*.tsx"
+  }
+}

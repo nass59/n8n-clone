@@ -1,128 +1,109 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Nodebase: Workflow automation platform (n8n clone). Next.js 16 + tRPC + Prisma + Better Auth.
 
-## Project Overview
+> **Read `.claude/INDEX.json` first** — structured index of all modules, exports, and file patterns. Avoid scanning the repo.
 
-Nodebase is a workflow automation platform (n8n clone) built with Next.js 16+. It combines AI capabilities with business process automation, providing technical teams the flexibility of code with the speed of no-code.
+## Quick Reference
 
-## Commands
+| Command | Purpose |
+|---------|---------|
+| `bun run dev` | Dev server |
+| `bun run dev:all` | All services (mprocs) |
+| `bun run lint` / `format` | Biome check/fix |
+| `bunx prisma migrate dev --name <n>` | New migration |
+| `bunx shadcn@latest add <c>` | Add UI component |
+| `bun run index:generate` | Regenerate `.claude/INDEX.json` |
 
-```bash
-# Development
-bun run dev          # Start Next.js dev server
-bun run dev:all      # Start all services (Next.js + Inngest) via mprocs
-bun run inngest:dev  # Start Inngest dev server alone (UI at localhost:8288)
+## Structure
 
-# Build & Production
-bun run build        # Build for production
-bun run start        # Start production server
-
-# Code Quality
-bun run lint         # Check code with Biome (uses Ultracite preset)
-bun run format       # Format code with Biome
-
-# Database
-bunx prisma generate            # Generate Prisma client (outputs to src/generated/prisma)
-bunx prisma migrate dev --name <name>  # Create and apply migration
-bunx prisma studio              # Open database GUI
-
-# UI Components
-bunx shadcn@latest add <component>  # Add shadcn/ui component
+```
+src/
+├── app/                   # Next.js App Router
+│   ├── (auth)/            # Auth pages (login, signup)
+│   ├── (dashboard)/       # Protected dashboard routes
+│   └── api/               # API routes (trpc, auth, inngest)
+├── modules/{feature}/     # Feature modules
+│   ├── components/        # UI components
+│   ├── hooks/             # React hooks (use-*.ts)
+│   ├── server/            # Server: routers.ts, service.ts, schemas.ts
+│   └── types/             # Types (*.types.ts)
+├── trpc/                  # tRPC: client.ts, server.ts, routers/_app.ts
+├── lib/                   # Core: auth.ts, db.ts, utils.ts
+└── components/ui/         # shadcn/ui primitives
 ```
 
-## Architecture
+## Patterns
 
-### Tech Stack
-- **Framework**: Next.js 16+ (App Router, React Server Components)
-- **Database**: PostgreSQL with Prisma ORM + Neon adapter
-- **API**: tRPC (type-safe end-to-end)
-- **Auth**: Better Auth with Polar integration for subscriptions
-- **Background Jobs**: Inngest (event-driven, AI-wrapped steps)
-- **AI**: Vercel AI SDK (OpenAI, Anthropic, Google)
-- **UI**: shadcn/ui with Tailwind CSS 4, Tabler Icons
-- **Linting**: Biome with Ultracite preset
-- **Package Manager**: Bun
-
-### Key Directories
-- `src/app/` - Next.js App Router pages and API routes
-- `src/modules/` - Feature modules (auth, workflows, subscriptions)
-- `src/trpc/` - tRPC setup with routers in `routers/`
-- `src/inngest/` - Background job functions
-- `src/lib/` - Core utilities (auth, db, polar)
-- `src/components/ui/` - shadcn/ui components
-- `src/generated/prisma/` - Generated Prisma client
-
-### tRPC Usage
-
-Server Components (direct call):
+### Imports
 ```typescript
+// tRPC Server
 import { caller } from "@/trpc/server";
-const data = await caller.workflows.getMany({ page: 1, pageSize: 10, search: "" });
-```
+await caller.workflows.getMany({ page: 1, pageSize: 10, search: "" });
 
-Client Components (React Query):
-```typescript
+// tRPC Client
 import { useTRPC } from "@/trpc/client";
-const trpc = useTRPC();
-const { data } = trpc.workflows.getMany.useQuery({ page: 1, pageSize: 10, search: "" });
-```
+trpc.workflows.getMany.useQuery({ ... });
 
-Prefetching with hydration:
-```typescript
-import { prefetch, HydrateClient, trpc } from "@/trpc/server";
-prefetch(trpc.workflows.getMany.queryOptions({ ... }));
-return <HydrateClient>...</HydrateClient>;
+// Auth
+import { auth } from "@/lib/auth";              // Server
+import { authClient } from "@/lib/auth-client"; // Client
+import { requireAuth } from "@/lib/auth-utils"; // Guards
+
+// Database
+import prisma from "@/lib/db";
 ```
 
 ### tRPC Procedures
-- `baseProcedure` - No auth required
-- `protectedProcedure` - Requires authenticated session (ctx.auth)
-- `premiumProcedure` - Requires active Polar subscription (ctx.customer)
+- `baseProcedure` — Public
+- `protectedProcedure` — Requires `ctx.auth`
+- `premiumProcedure` — Requires `ctx.customer` (Polar subscription)
 
-### Authentication
-- Server: `import { auth } from "@/lib/auth"` - Better Auth instance
-- Client: `import { authClient } from "@/lib/auth-client"` - React client
-- Utilities: `import { requireAuth, requireUnauth } from "@/lib/auth-utils"` - Server guards
+## Rules
 
-### Database
-```typescript
-import prisma from "@/lib/db";
-const workflow = await prisma.workflow.findUnique({ where: { id } });
-```
+**TypeScript**: Use `type` not `interface`. No `any` — use `unknown`.
 
-## Code Conventions
+**Components**:
+- Pages (`app/**/page.tsx`): `export default function PageName()`
+- All others: `export const Component = () => { }`
+- Never `React.FC`
+- UI NEVER accesses DB
 
-### TypeScript
-- **Always use `type` over `interface`** (enforced by Biome)
-- No `any` types - use `unknown` instead
-- Strict mode enabled
+**Files**:
+- kebab-case always (`workflow-builder.tsx`, `use-auth.ts`)
+- Never use barrel files (`index.ts`)
 
-### Components
-- **Pages** (`app/**/page.tsx`): Use `export default function`
-- **Everything else**: Use `export const` with arrow functions
-- Never use `React.FC`
+**React**: Server Components default. Add `'use client'` only when needed.
 
-```typescript
-// Page
-export default function WorkflowsPage() {
-  return <main>...</main>;
-}
+**Styling**: Tailwind utilities + `cn()` from `@/lib/utils`
 
-// Component
-export const WorkflowCard = ({ workflow }: WorkflowCardProps) => {
-  return <Card>{workflow.name}</Card>;
-};
-```
+**architectural Principles**:
+- UI → API → DB
+- Prisma ONLY used in API layer
+- Workflow logic is framework-agnostic
 
-### File Naming
-- **kebab-case** for all files: `workflow-builder.tsx`, `use-auth.ts`
+**Coding Style**:
+- Explicit naming > clever abstractions
+- Copy existing patterns
+- One responsibility per file
+- Files < 200 LOC
 
-### React Patterns
-- Server Components by default - add `'use client'` only when needed
-- Use async Server Components for data fetching
-- Use path aliases: `@/components`, `@/lib`, `@/hooks`, `@/modules`
+**Forbidden**:
+- New global abstractions
+- Implicit side-effects
+- Architectural changes without instruction
 
-### Styling
-- Use Tailwind utilities directly
-- Use `cn()` from `@/lib/utils` for conditional classes
+## File Discovery
+
+| To find | Pattern |
+|---------|---------|
+| Feature module | `src/modules/{name}/` |
+| tRPC router | `src/modules/{name}/server/routers.ts` |
+| Service logic | `src/modules/{name}/server/service.ts` |
+| Schemas | `src/modules/{name}/server/schemas.ts` |
+| Feature hooks | `src/modules/{name}/hooks/use-*.ts` |
+| UI components | `src/modules/{name}/components/**/*.tsx` |
+| Shared components | `src/modules/shared/components/` |
+| shadcn primitives | `src/components/ui/*.tsx` |
+| App pages | `src/app/**/page.tsx` |
+| API routes | `src/app/api/**/route.ts` |

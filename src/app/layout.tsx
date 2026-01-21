@@ -5,22 +5,12 @@ import { siteConfig } from "@/lib/site-config";
 
 import "./globals.css";
 
-/**
- * Viewport configuration for responsive design and mobile optimization.
- *
- * @remarks
- * Separated from metadata as per Next.js 14+ best practices.
- * The `themeColor` affects the browser chrome on mobile devices.
- */
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   themeColor: siteConfig.themeColor,
 };
 
-/**
- * Global metadata configuration for SEO and social sharing.
- */
 export const metadata: Metadata = {
   title: {
     default: `${siteConfig.name} - ${siteConfig.tagline}`,
@@ -60,13 +50,9 @@ type RootLayoutProps = Readonly<{
 }>;
 
 /**
- * Root layout component defining the HTML document structure.
- *
- * All client-side context providers are delegated to the `Providers` component,
- * keeping this layout as a pure Server Component.
- *
- * The `suppressHydrationWarning` on `<html>` prevents React warnings
- * when the dark mode class differs between server and client render.
+ * PURPOSE: Root layout with global metadata and provider setup
+ * RENDERS: HTML document with Providers and children
+ * USES: siteConfig for metadata, fontVariables for styling
  */
 export default function RootLayout({ children }: RootLayoutProps) {
   return (

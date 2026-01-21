@@ -24,7 +24,8 @@
     "auth:generate": "bunx @better-auth/cli generate",
     "auth:migrate": "bunx @better-auth/cli migrate",
     "auth:info": "bunx @better-auth/cli info",
-    "auth:secret": "bunx @better-auth/cli secret"
+    "auth:secret": "bunx @better-auth/cli secret",
+    "index:generate": "bun scripts/generate-index.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.15",

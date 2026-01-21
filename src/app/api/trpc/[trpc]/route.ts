@@ -1,3 +1,7 @@
+/**
+ * PURPOSE: Handle all tRPC RPC calls
+ * PURE: No (invokes server procedures with side effects)
+ */
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { createTRPCContext } from "@/trpc/init";
 import { appRouter } from "@/trpc/routers/_app";
