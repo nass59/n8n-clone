@@ -1,6 +1,13 @@
 /**
- * Base URL for the application.
- * Uses environment variable in production, falls back to localhost in development.
+ * Global site configuration for metadata, branding, and URLs.
+ * Used for SEO, social cards, theme, and navigation constants.
+ * Single source of truth for site info (name, description, links, locale).
+ */
+
+/**
+ * PURPOSE: Resolve base URL from env vars or defaults (localhost)
+ * PURE: Yes
+ * USED BY: siteConfig.url for absolute URLs in metadata
  */
 const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_APP_URL) {
@@ -15,46 +22,30 @@ const getBaseUrl = () => {
 };
 
 /**
- * Central configuration object for the Nodebase application.
+ * PURPOSE: Central config object for all site metadata and branding
+ * PURE: Yes
+ * USED BY: HTML head meta tags, social cards, navigation, landing pages
  */
 export const siteConfig = {
-  /** Application name used in titles and branding */
   name: "Nodebase",
-
-  /** Short tagline for the application */
   tagline: "Workflow Automation Platform",
-
-  /** Full description for SEO and meta tags */
   description:
     "A workflow automation platform combining AI capabilities with business process automation. Technical flexibility of code with the speed of no-code.",
-
-  /** Base URL for the application (used for absolute URLs in metadata) */
   url: getBaseUrl(),
-
-  /** Path to the default Open Graph image */
   ogImage: "/seo/og-image.jpg",
-
-  /** Social media and contact links */
   links: {
     twitter: "https://twitter.com/nass190",
     github: "https://github.com/nass59",
   },
-
-  /** Twitter handle for Twitter cards (without @) */
   twitterHandle: "@nass190",
-
-  /** Default locale for the application */
   locale: "en-US",
-
-  /** Theme color for browser chrome (mobile) */
   themeColor: "#000000",
-
-  /** Creator/author information */
   creator: "nassim afrete",
 } as const;
 
 /**
- * Type representing the site configuration object.
- * Useful for typing props that accept partial config.
+ * PURPOSE: Type representing site configuration structure
+ * PURE: Yes
+ * USED BY: Typing config props and partial overrides
  */
 export type SiteConfig = typeof siteConfig;

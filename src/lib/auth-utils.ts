@@ -1,3 +1,9 @@
+/**
+ * Server-side authentication utilities for auth guards and session retrieval.
+ * Use in Server Components, Server Actions, and loaders.
+ * Always use requireAuth() or requireUnauth() for route protection.
+ */
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth, type Session } from "@/lib/auth";
@@ -8,11 +14,10 @@ type AuthRedirectOptions = {
 };
 
 /**
- * Retrieves the current session without redirecting.
- *
- * Use this when you need to check authentication status without enforcing it,
- * such as conditionally rendering UI based on auth state or for optional
- * authentication scenarios.
+ * PURPOSE: Get current session without enforcing authentication
+ * PURE: No (reads headers)
+ * USED BY: Conditional rendering, optional auth scenarios
+ * RETURNS: Session | null
  */
 export const getSession = async (): Promise<Session | null> => {
   const session = await auth.api.getSession({
@@ -23,13 +28,10 @@ export const getSession = async (): Promise<Session | null> => {
 };
 
 /**
- * Requires an authenticated session, redirecting to login if not found.
- *
- * Use this in Server Components or Server Actions that require authentication.
- * The function will redirect to the login page if no valid session exists,
- * so the return value is guaranteed to be a valid session.
- *
- * @returns The authenticated session (never `null` due to redirect).
+ * PURPOSE: Guard that requires authenticated session, redirects if missing
+ * PURE: No (redirect on fail)
+ * USED BY: Protected Server Components and loaders
+ * RETURNS: Session (never null; redirects on auth failure)
  */
 export const requireAuth = async (
   options: AuthRedirectOptions = {}
@@ -45,10 +47,10 @@ export const requireAuth = async (
 };
 
 /**
- * Requires no authenticated session, redirecting away if one exists.
- *
- * Use this for pages that should only be accessible to unauthenticated users,
- * such as login, registration, or password reset pages.
+ * PURPOSE: Guard that requires unauthenticated session, redirects if authenticated
+ * PURE: No (redirect on fail)
+ * USED BY: Public pages (login, signup) that reject authenticated users
+ * RETURNS: void (redirects to dashboard if session exists)
  */
 export const requireUnauth = async (
   options: AuthRedirectOptions = {}

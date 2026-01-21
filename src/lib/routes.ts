@@ -1,29 +1,28 @@
 /**
- * Centralized application route paths.
- *
- * This is the single source of truth for all URL paths used across the application.
- * Always import from here instead of hardcoding paths to ensure consistency
- * and enable easy refactoring.
+ * Single source of truth for all application routes.
+ * Use instead of hardcoding paths to enable safe refactoring.
+ * Covers core, auth, and workflow automation routes.
+ */
+
+/**
+ * PURPOSE: Constant map of all valid application route paths
+ * PURE: Yes
+ * USED BY: Navigation, redirects, link generation throughout the app
+ * PATTERN: as const for type inference
  */
 export const APP_ROUTES = {
-  // Core application routes
   HOME: "/",
-
-  // Authentication routes
   LOGIN: "/login",
   SIGNUP: "/signup",
   FORGOT_PASSWORD: "/forgot-password",
-
-  // Workflow automation routes
   WORKFLOWS: "/workflows",
   CREDENTIALS: "/credentials",
   EXECUTIONS: "/executions",
 } as const;
 
 /**
- * Union type of all valid application route paths.
- *
- * Use this type for type-safe route handling in functions that accept
- * route parameters.
+ * PURPOSE: Type representing all valid route paths
+ * PURE: Yes
+ * USED BY: Functions that accept route parameters for type-safe routing
  */
 export type AppRoute = (typeof APP_ROUTES)[keyof typeof APP_ROUTES];

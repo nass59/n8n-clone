@@ -12,34 +12,9 @@ import { SidebarNavGroupComponent } from "@/modules/navigation/components/sideba
 import { SIDEBAR_NAVIGATION } from "@/modules/navigation/config/sidebar-navigation";
 
 /**
- * Main application sidebar providing primary navigation.
- *
- * Composes the sidebar from three sections:
- * - **Header**: Application brand/logo (SidebarBrand)
- * - **Content**: Navigation groups defined in SIDEBAR_NAVIGATION
- * - **Footer**: Account actions (upgrade, billing, sign out)
- *
- * Supports collapsible mode via the `collapsible="icon"` prop, which
- * collapses the sidebar to show only icons with tooltips on hover.
- *
- * **Structure:**
- * ```
- * +------------------+
- * | [Logo] Nodebase  |  <- SidebarHeader / SidebarBrand
- * +------------------+
- * | Workflows        |
- * | Credentials      |  <- SidebarContent / SidebarNavGroupComponent
- * | Executions       |
- * +------------------+
- * | Upgrade to Pro   |
- * | Billing Portal   |  <- SidebarFooter / SidebarFooterActions
- * | Sign out         |
- * +------------------+
- * ```
- *
- * @see {@link SIDEBAR_NAVIGATION} for configuring navigation items
- * @see {@link SidebarBrand} for brand section
- * @see {@link SidebarFooterActions} for footer actions
+ * PURPOSE: Main application sidebar with brand, navigation, and account actions
+ * RENDERS: Three-section sidebar (header, content, footer) with collapsible icon mode
+ * DEPENDENCIES: SIDEBAR_NAVIGATION config, SidebarBrand, SidebarNavGroupComponent, SidebarFooterActions
  */
 export const AppSidebar = () => {
   return (

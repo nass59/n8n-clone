@@ -1,11 +1,14 @@
+/**
+ * Google Fonts configuration for Next.js.
+ * fontVariables string applied to <html> to expose --font-sans and --font-mono CSS vars.
+ */
+
 import { Spline_Sans, Spline_Sans_Mono } from "next/font/google";
 
 /**
- * Primary sans-serif font for body text and UI elements.
- *
- * @remarks
- * Available via CSS variable `--font-sans` in Tailwind config.
- * Weights: 300 (light), 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+ * PURPOSE: Primary sans-serif font (Spline Sans) with weights 300-700
+ * OUTPUT: CSS variable --font-sans for Tailwind config
+ * USED BY: Root layout to apply globally
  */
 export const fontSans = Spline_Sans({
   subsets: ["latin"],
@@ -15,11 +18,9 @@ export const fontSans = Spline_Sans({
 });
 
 /**
- * Monospace font for code blocks, technical content, and data displays.
- *
- * @remarks
- * Available via CSS variable `--font-mono` in Tailwind config.
- * Weights: 300 (light), 400 (regular), 500 (medium), 600 (semibold), 700 (bold)
+ * PURPOSE: Monospace font (Spline Sans Mono) for code and technical content
+ * OUTPUT: CSS variable --font-mono for Tailwind config
+ * USED BY: Root layout, code blocks, data displays
  */
 export const fontMono = Spline_Sans_Mono({
   subsets: ["latin"],
@@ -29,10 +30,8 @@ export const fontMono = Spline_Sans_Mono({
 });
 
 /**
- * Combined CSS class string containing all font CSS variables.
- * Apply this to the `<html>` element to make fonts available globally.
- *
- * @example
- * <html className={`${fontVariables} dark`} lang="en">
+ * PURPOSE: Combined CSS variable string for both fonts
+ * OUTPUT: Space-separated className string
+ * USED BY: <html className={fontVariables}> in root layout
  */
 export const fontVariables = `${fontSans.variable} ${fontMono.variable}`;

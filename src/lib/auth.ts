@@ -1,3 +1,10 @@
+/**
+ * Server-side Better Auth instance with Polar subscription plugin.
+ * Provides email/password auth, session management, account linking, and subscription checkout.
+ * Session: 7-day expiry, 24-hour refresh window, 5-min cookie cache.
+ * Rate limit: 100 req/60s.
+ */
+
 import { checkout, polar, portal } from "@polar-sh/better-auth";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
@@ -6,18 +13,10 @@ import prisma from "@/lib/db";
 import { polarClient } from "@/lib/polar";
 
 /**
- * The main Better Auth instance configured for Nodebase.
- *
- * Provides authentication via email/password with the following features:
- * - **Database**: PostgreSQL via Prisma adapter with Neon serverless support
- * - **Sessions**: 7-day expiry with 24-hour refresh and 5-minute cookie cache
- * - **Account Linking**: Allows linking Google and GitHub accounts
- * - **Rate Limiting**: 100 requests per 60-second window
- * - **Polar Integration**: Automatic customer creation and subscription checkout
- *
- * @remarks
- * The `nextCookies()` plugin enables seamless cookie handling in React Server Components.
- * The Polar plugin creates a customer record on signup and enables the `/pro` checkout flow.
+ * PURPOSE: Main Better Auth server instance for authentication and session management
+ * PURE: No (DB, Polar API)
+ * USED BY: auth-utils.ts (getSession, requireAuth), tRPC context
+ * PLUGINS: nextCookies (RSC support), Polar (customer creation, checkout, portal)
  */
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -70,9 +69,8 @@ export const auth = betterAuth({
 });
 
 /**
- * Inferred session type from the Better Auth configuration.
- *
- * Contains the authenticated user data and session metadata. This type
- * automatically includes any additional fields added by plugins (e.g., Polar customer data).
+ * PURPOSE: Type representing authenticated session with user and Polar data
+ * OUTPUT: Contains user data, session metadata, and subscription info (if Polar customer)
+ * USED BY: Auth guards, tRPC context, protected components
  */
 export type Session = typeof auth.$Infer.Session;
