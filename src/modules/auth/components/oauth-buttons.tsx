@@ -42,36 +42,19 @@ export const OAuthButtons = ({ disabled }: OAuthButtonsProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <Button
-        className="w-full"
-        disabled={disabled}
-        onClick={() => handleOAuthSignIn("github")}
-        type="button"
-        variant="outline"
-      >
-        <Image
-          alt={OAUTH_PROVIDERS.GITHUB.name}
-          height={20}
-          src={OAUTH_PROVIDERS.GITHUB.logo}
-          width={20}
-        />
-        Continue with {OAUTH_PROVIDERS.GITHUB.name}
-      </Button>
-      <Button
-        className="w-full"
-        disabled={disabled}
-        onClick={() => handleOAuthSignIn("google")}
-        type="button"
-        variant="outline"
-      >
-        <Image
-          alt={OAUTH_PROVIDERS.GOOGLE.name}
-          height={20}
-          src={OAUTH_PROVIDERS.GOOGLE.logo}
-          width={20}
-        />
-        Continue with {OAUTH_PROVIDERS.GOOGLE.name}
-      </Button>
+      {Object.entries(OAUTH_PROVIDERS).map(([key, provider]) => (
+        <Button
+          className="w-full"
+          disabled={disabled}
+          key={key}
+          onClick={() => handleOAuthSignIn(key as OAuthProvider)}
+          type="button"
+          variant="outline"
+        >
+          <Image alt={provider.name} src={provider.logo} />
+          Continue with {provider.name}
+        </Button>
+      ))}
     </div>
   );
 };

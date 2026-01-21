@@ -22,11 +22,11 @@ export const AUTH_ROUTES = {
  * Currently: GitHub, Google
  */
 export const OAUTH_PROVIDERS = {
-  GITHUB: {
+  github: {
     name: "GitHub",
     logo: "/logos/github.svg",
   },
-  GOOGLE: {
+  google: {
     name: "Google",
     logo: "/logos/google.svg",
   },

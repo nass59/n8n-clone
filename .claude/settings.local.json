@@ -6,7 +6,8 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "Skill(Better:*)",
-      "WebFetch(domain:www.better-auth.com)"
+      "WebFetch(domain:www.better-auth.com)",
+      "Bash(wc:*)"
     ]
   },
   "outputStyle": "Explanatory"

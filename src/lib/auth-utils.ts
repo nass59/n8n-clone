@@ -34,7 +34,7 @@ export const getSession = async (): Promise<Session | null> => {
  * RETURNS: Session (never null; redirects on auth failure)
  */
 export const requireAuth = async (
-  options: AuthRedirectOptions = {}
+  options: Partial<AuthRedirectOptions> = {}
 ): Promise<Session> => {
   const session = await getSession();
   const { redirectTo = AUTH_ROUTES.LOGIN } = options;
