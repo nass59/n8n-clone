@@ -33,27 +33,6 @@ src/
 └── components/ui/         # shadcn/ui primitives
 ```
 
-## Patterns
-
-### Imports
-```typescript
-// tRPC Server
-import { caller } from "@/trpc/server";
-await caller.workflows.getMany({ page: 1, pageSize: 10, search: "" });
-
-// tRPC Client
-import { useTRPC } from "@/trpc/client";
-trpc.workflows.getMany.useQuery({ ... });
-
-// Auth
-import { auth } from "@/lib/auth";              // Server
-import { authClient } from "@/lib/auth-client"; // Client
-import { requireAuth } from "@/lib/auth-utils"; // Guards
-
-// Database
-import prisma from "@/lib/db";
-```
-
 ### tRPC Procedures
 - `baseProcedure` — Public
 - `protectedProcedure` — Requires `ctx.auth`
@@ -92,18 +71,3 @@ import prisma from "@/lib/db";
 - New global abstractions
 - Implicit side-effects
 - Architectural changes without instruction
-
-## File Discovery
-
-| To find | Pattern |
-|---------|---------|
-| Feature module | `src/modules/{name}/` |
-| tRPC router | `src/modules/{name}/server/routers.ts` |
-| Service logic | `src/modules/{name}/server/service.ts` |
-| Schemas | `src/modules/{name}/server/schemas.ts` |
-| Feature hooks | `src/modules/{name}/hooks/use-*.ts` |
-| UI components | `src/modules/{name}/components/**/*.tsx` |
-| Shared components | `src/modules/shared/components/` |
-| shadcn primitives | `src/components/ui/*.tsx` |
-| App pages | `src/app/**/page.tsx` |
-| API routes | `src/app/api/**/route.ts` |
