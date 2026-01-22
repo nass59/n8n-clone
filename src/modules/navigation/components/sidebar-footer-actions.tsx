@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * PURPOSE: Account and billing menu in sidebar footer
+ * RENDERS: Upgrade button (conditional), Billing Portal, Sign Out
+ * PATTERN: Subscription-gated upgrade button (hidden if subscribed or loading)
+ * DEPENDS: authClient (Better Auth), useHasActiveSubscription, Polar integration
+ * USED BY: Sidebar layout as footer content
+ */
+
 import { IconCreditCard, IconLogout, IconStar } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import {
@@ -11,11 +19,6 @@ import { authClient } from "@/lib/auth-client";
 import { APP_ROUTES } from "@/lib/routes";
 import { useHasActiveSubscription } from "@/modules/subscriptions/hooks/use-subscription";
 
-/**
- * PURPOSE: Render account/billing actions in sidebar footer with subscription gating
- * RENDERS: Conditional upgrade button, billing portal link, sign out button
- * DEPENDS: authClient (Better Auth), useHasActiveSubscription hook, Polar integration
- */
 export const SidebarFooterActions = () => {
   const router = useRouter();
   const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
@@ -30,7 +33,6 @@ export const SidebarFooterActions = () => {
     });
   };
 
-  /** Hide upgrade button while loading or if user has active subscription */
   const showUpgradeButton = !(hasActiveSubscription || isLoading);
 
   return (

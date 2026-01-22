@@ -1,3 +1,13 @@
+/**
+ * PURPOSE: Debounced search with automatic pagination reset
+ * INPUT: params object with search/page, setParams callback, optional debounceMs
+ * OUTPUT: { searchValue, onSearchChange } for controlled search input
+ * BEHAVIOR: Debounces input 500ms, resets page to 1 when search changes
+ * GENERIC: T extends ListParams - works with any list pagination params
+ * USED BY: List pages (workflows, integrations) as bridge to tRPC queries
+ * PURE: No (reads/writes params, useState)
+ */
+
 import { useEffect, useState } from "react";
 import { PAGINATION } from "@/config/constants";
 
@@ -12,13 +22,6 @@ type UseListSearchOptions<T extends ListParams> = {
   debounceMs?: number;
 };
 
-/**
- * PURPOSE: Debounced search input with pagination reset
- * BEHAVIOR: Debounces search input 500ms, resets to page 1 on search change
- * GENERIC: T extends ListParams - works with any params type
- * RETURNS: { searchValue, onSearchChange } for controlled ListSearch component
- * USED BY: All list pages - bridges ListSearch component to tRPC queries
- */
 export const useListSearch = <T extends ListParams>({
   params,
   setParams,
@@ -27,23 +30,22 @@ export const useListSearch = <T extends ListParams>({
   const [localSearch, setLocalSearch] = useState(params.search);
 
   useEffect(() => {
-    if (localSearch === "" && params.search !== "") {
+    const setSearchParams = (search: string) => {
       setParams({
         ...params,
-        search: "",
+        search,
         page: PAGINATION.DEFAULT_PAGE,
       });
+    };
 
+    if (localSearch === "" && params.search !== "") {
+      setSearchParams("");
       return;
     }
 
     const timer = setTimeout(() => {
       if (localSearch !== params.search) {
-        setParams({
-          ...params,
-          search: localSearch,
-          page: PAGINATION.DEFAULT_PAGE,
-        });
+        setSearchParams(localSearch);
       }
     }, debounceMs);
 
