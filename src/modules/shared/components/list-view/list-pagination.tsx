@@ -11,7 +11,6 @@ export type ListPaginationProps = {
  * PURPOSE: Page navigation for list views
  * DISPLAY: Current page indicator + Previous/Next buttons
  * BOUNDARY HANDLING: Disables buttons on first/last page, clamps page numbers
- * ACCESSIBILITY: aria-labels on buttons + nav landmark
  * USED BY: All paginated list pages
  */
 export const ListPagination = ({

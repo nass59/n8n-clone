@@ -5,8 +5,8 @@ import {
   SidebarGroupContent,
   SidebarMenu,
 } from "@/components/ui/sidebar";
-import { SidebarNavItemComponent } from "@/modules/navigation/components/sidebar-nav-item";
-import type { SidebarNavGroup } from "@/modules/navigation/types/navigation.types";
+import type { SidebarNavGroup } from "../types/navigation.types";
+import { SidebarNavItemComponent } from "./sidebar-nav-item";
 
 type SidebarNavGroupProps = {
   group: SidebarNavGroup;

@@ -1,10 +1,9 @@
 import { IconFolderOpen, IconHistory, IconLock } from "@tabler/icons-react";
 import { APP_ROUTES } from "@/lib/routes";
-import type { SidebarNavGroup } from "@/modules/navigation/types/navigation.types";
+import type { SidebarNavGroup } from "../types/navigation.types";
 
 /**
  * PURPOSE: Single source of truth for sidebar navigation structure
- * PURE: Yes
  * USED BY: SidebarNav component (renders navigation groups)
  */
 export const SIDEBAR_NAVIGATION: SidebarNavGroup[] = [

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { APP_ROUTES } from "@/lib/routes";
-import type { SidebarNavItem } from "@/modules/navigation/types/navigation.types";
+import type { SidebarNavItem } from "../types/navigation.types";
 
 type SidebarNavItemProps = {
   item: SidebarNavItem;
@@ -12,7 +12,6 @@ type SidebarNavItemProps = {
 
 /**
  * PURPOSE: Determine active state using exact match for home, prefix match for other routes
- * INPUT: url (nav item path), pathname (current route)
  * OUTPUT: boolean active state
  */
 const isItemActive = (url: string, pathname: string): boolean => {
@@ -26,7 +25,6 @@ const isItemActive = (url: string, pathname: string): boolean => {
 /**
  * PURPOSE: Render single sidebar nav item with active state and icon
  * RENDERS: Link with active highlight, icon, and title from SidebarNavItem
- * USES: usePathname for active state detection, isItemActive helper
  */
 export const SidebarNavItemComponent = ({ item }: SidebarNavItemProps) => {
   const pathname = usePathname();

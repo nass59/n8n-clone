@@ -23,7 +23,6 @@ type ListHeaderProps = {
 /**
  * PURPOSE: Page header with title, description, and action button
  * ACTION MODES: navigationHref (Link) | onAction (click handler) | none
- * TYPE SAFETY: Discriminated union prevents invalid prop combinations
  * USED BY: All list pages - renders above search/items
  */
 export const ListHeader = (props: ListHeaderProps) => {

@@ -11,9 +11,9 @@
  */
 
 import { ListItems } from "@/modules/shared/components/list-view/list-items";
-import { WorkflowsEmpty } from "@/modules/workflows/components/list/workflows-empty";
-import { WorkflowItem } from "@/modules/workflows/components/list/workflows-item";
 import { useSuspenseWorkflows } from "../../hooks/use-workflows";
+import { WorkflowsEmpty } from "./workflows-empty";
+import { WorkflowItem } from "./workflows-item";
 
 export const WorkflowsList = () => {
   const workflows = useSuspenseWorkflows();

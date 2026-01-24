@@ -1,9 +1,4 @@
 /**
- * PURPOSE: Type definitions for auth module
- * PURE: Yes (type-only)
- */
-
-/**
  * OAuth provider identifier.
  * Supported providers: GitHub, Google
  */

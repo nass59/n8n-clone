@@ -15,7 +15,6 @@ const LOGO_SIZE = 30;
 /**
  * PURPOSE: Render app logo and name in sidebar header, linking to home
  * RENDERS: Logo image + app name from siteConfig
- * DEPENDS: siteConfig for branding info
  */
 export const SidebarBrand = () => {
   return (

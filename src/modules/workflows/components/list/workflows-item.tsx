@@ -9,7 +9,7 @@ import { IconTopologyRing } from "@tabler/icons-react";
 import { formatDistanceToNow } from "date-fns";
 import type { Workflow } from "@/generated/prisma/client";
 import { ListItem } from "@/modules/shared/components/list-view/list-item";
-import { useRemoveWorkflow } from "@/modules/workflows/hooks/use-workflows";
+import { useRemoveWorkflow } from "../../hooks/use-workflows";
 
 type Props = {
   data: Workflow;

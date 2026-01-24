@@ -4,11 +4,8 @@
  * PURPOSE: Root tRPC + React Query provider for client-side API access
  * EXPORTS: TRPCProvider, useTRPC hook (exported as context), TRPCReactProvider component
  * PATTERN: Singleton query client in browser, fresh instance on server
- * TRANSPORT: httpBatchLink with superjson serialization (date, Set, Map support)
  * USED BY: Root layout (app/_app.tsx)
  */
-
-// NOTE: "use client" allows mounting from server component root
 
 import type { QueryClient } from "@tanstack/react-query";
 import { QueryClientProvider } from "@tanstack/react-query";
