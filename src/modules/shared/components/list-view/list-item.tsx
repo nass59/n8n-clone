@@ -8,7 +8,7 @@
 
 import { IconDotsVertical, IconTrash } from "@tabler/icons-react";
 import Link from "next/link";
-import type { MouseEvent, ReactNode } from "react";
+import { type MouseEvent, type ReactNode, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -45,22 +45,27 @@ export const ListItem = ({
   isRemoving,
   className,
 }: ListItemProps) => {
-  const handleClickOnDropdown = (e: MouseEvent) => {
+  // Memoize handlers to prevent unnecessary re-renders (Rule 5.5)
+  const handleClickOnDropdown = useCallback((e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-  };
+  }, []);
 
-  const handleRemove = async (e: MouseEvent) => {
-    handleClickOnDropdown(e);
+  const handleRemove = useCallback(
+    async (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-    if (isRemoving) {
-      return;
-    }
+      if (isRemoving) {
+        return;
+      }
 
-    if (onRemove) {
-      await onRemove();
-    }
-  };
+      if (onRemove) {
+        await onRemove();
+      }
+    },
+    [isRemoving, onRemove]
+  );
 
   return (
     <Link href={href} prefetch>

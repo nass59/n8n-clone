@@ -8,7 +8,7 @@
  * PURE: No (reads/writes params, useState)
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PAGINATION } from "@/config/constants";
 
 type ListParams = {
@@ -29,34 +29,51 @@ export const useListSearch = <T extends ListParams>({
 }: UseListSearchOptions<T>) => {
   const [localSearch, setLocalSearch] = useState(params.search);
 
+  // Extract primitive value to narrow effect dependencies (Rule 5.3)
+  // This prevents effect re-runs when other params fields change
+  const paramsSearch = params.search;
+
+  // Store latest params/setParams in refs to avoid stale closures (Rule 8.2)
+  // This allows the effect to access current values without re-subscribing
+  const paramsRef = useRef(params);
+  const setParamsRef = useRef(setParams);
+
   useEffect(() => {
-    const setSearchParams = (search: string) => {
-      setParams({
-        ...params,
-        search,
+    paramsRef.current = params;
+  }, [params]);
+
+  useEffect(() => {
+    setParamsRef.current = setParams;
+  }, [setParams]);
+
+  useEffect(() => {
+    if (localSearch === "" && paramsSearch !== "") {
+      setParamsRef.current({
+        ...paramsRef.current,
+        search: "",
         page: PAGINATION.DEFAULT_PAGE,
       });
-    };
-
-    if (localSearch === "" && params.search !== "") {
-      setSearchParams("");
       return;
     }
 
     const timer = setTimeout(() => {
-      if (localSearch !== params.search) {
-        setSearchParams(localSearch);
+      if (localSearch !== paramsSearch) {
+        setParamsRef.current({
+          ...paramsRef.current,
+          search: localSearch,
+          page: PAGINATION.DEFAULT_PAGE,
+        });
       }
     }, debounceMs);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [localSearch, params, setParams, debounceMs]);
+  }, [localSearch, paramsSearch, debounceMs]);
 
   useEffect(() => {
-    setLocalSearch(params.search);
-  }, [params.search]);
+    setLocalSearch(paramsSearch);
+  }, [paramsSearch]);
 
   return {
     searchValue: localSearch,

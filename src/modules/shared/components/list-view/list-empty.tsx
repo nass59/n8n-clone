@@ -1,3 +1,5 @@
+"use client";
+
 import { IconPackage } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {

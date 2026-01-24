@@ -23,7 +23,7 @@ export const PasswordInput = ({ ref, ...props }: PasswordInputProps) => {
       <Input {...props} ref={ref} type={showPassword ? "text" : "password"} />
       <Button
         className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-        onClick={() => setShowPassword(!showPassword)}
+        onClick={() => setShowPassword((prev) => !prev)}
         size="sm"
         type="button"
         variant="ghost"

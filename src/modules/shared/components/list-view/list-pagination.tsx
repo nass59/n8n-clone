@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
 export type ListPaginationProps = {
@@ -23,6 +24,15 @@ export const ListPagination = ({
   const isFirstPage = page === 1;
   const isLastPage = page >= effectiveTotalPages;
 
+  // Memoize handlers to prevent unnecessary re-renders (Rule 5.5)
+  const handlePrevious = useCallback(() => {
+    onPageChange(Math.max(1, page - 1));
+  }, [onPageChange, page]);
+
+  const handleNext = useCallback(() => {
+    onPageChange(Math.min(effectiveTotalPages, page + 1));
+  }, [onPageChange, page, effectiveTotalPages]);
+
   return (
     <nav
       aria-label="Pagination"
@@ -35,7 +45,7 @@ export const ListPagination = ({
         <Button
           aria-label="Go to previous page"
           disabled={isFirstPage || disabled}
-          onClick={() => onPageChange(Math.max(1, page - 1))}
+          onClick={handlePrevious}
           size="sm"
           variant="outline"
         >
@@ -44,7 +54,7 @@ export const ListPagination = ({
         <Button
           aria-label="Go to next page"
           disabled={isLastPage || disabled}
-          onClick={() => onPageChange(Math.min(effectiveTotalPages, page + 1))}
+          onClick={handleNext}
           size="sm"
           variant="outline"
         >

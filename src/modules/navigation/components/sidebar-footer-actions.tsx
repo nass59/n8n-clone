@@ -10,6 +10,7 @@
 
 import { IconCreditCard, IconLogout, IconStar } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
+import { useCallback } from "react";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -23,15 +24,14 @@ export const SidebarFooterActions = () => {
   const router = useRouter();
   const { hasActiveSubscription, isLoading } = useHasActiveSubscription();
 
-  const handleSignOut = () => {
+  // Memoize sign out handler to prevent unnecessary re-renders (Rule 5.5)
+  const handleSignOut = useCallback(() => {
     authClient.signOut({
       fetchOptions: {
-        onSuccess: () => {
-          router.push(APP_ROUTES.LOGIN);
-        },
+        onSuccess: () => router.push(APP_ROUTES.LOGIN),
       },
     });
-  };
+  }, [router]);
 
   const showUpgradeButton = !(hasActiveSubscription || isLoading);
 

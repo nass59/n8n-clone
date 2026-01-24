@@ -10,7 +10,6 @@ export type ListSearchProps = {
   /**
    * Accessible label for screen readers.
    * Not visually displayed but important for accessibility.
-   * @default "Search"
    */
   label?: string;
 };

@@ -7,7 +7,9 @@
       "WebFetch(domain:github.com)",
       "Skill(Better:*)",
       "WebFetch(domain:www.better-auth.com)",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(npx tsc:*)",
+      "Bash(bunx tsc:*)"
     ]
   },
   "outputStyle": "Explanatory"
