@@ -33,26 +33,37 @@ export const SidebarFooterActions = () => {
     });
   }, [router]);
 
+  // Memoize checkout handler to prevent unnecessary re-renders (Rule 5.5)
+  const handleUpgrade = useCallback(() => {
+    authClient.checkout({ slug: "pro" });
+  }, []);
+
+  // Memoize portal handler to prevent unnecessary re-renders (Rule 5.5)
+  const handleOpenPortal = useCallback(() => {
+    authClient.customer.portal();
+  }, []);
+
+  // Explicit boolean check for conditional rendering (Rule 6.7)
   const showUpgradeButton = !(hasActiveSubscription || isLoading);
 
   return (
     <SidebarMenu>
-      {showUpgradeButton && (
+      {showUpgradeButton ? (
         <SidebarMenuItem>
           <SidebarMenuButton
             className="h-10 gap-x-4 px-4"
-            onClick={() => authClient.checkout({ slug: "pro" })}
+            onClick={handleUpgrade}
             tooltip="Upgrade to Pro"
           >
             <IconStar className="size-4" />
             <span>Upgrade to Pro</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
-      )}
+      ) : null}
       <SidebarMenuItem>
         <SidebarMenuButton
           className="h-10 gap-x-4 px-4"
-          onClick={() => authClient.customer.portal()}
+          onClick={handleOpenPortal}
           tooltip="Billing portal"
         >
           <IconCreditCard className="size-4" />

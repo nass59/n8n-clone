@@ -51,7 +51,12 @@ export const OAuthButtons = ({ disabled }: OAuthButtonsProps) => {
           type="button"
           variant="outline"
         >
-          <Image alt={provider.name} src={provider.logo} />
+          <Image
+            alt={provider.name}
+            height={20}
+            src={provider.logo}
+            width={20}
+          />
           Continue with {provider.name}
         </Button>
       ))}
