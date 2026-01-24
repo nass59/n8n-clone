@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   experimental: {
-    optimizePackageImports: ["@tabler/icons-react"],
+    optimizePackageImports: ["@tabler/icons-react", "@sentry/nextjs"],
   },
   async redirects() {
     return [

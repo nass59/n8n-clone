@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Providers } from "@/components/providers";
+import { ClientProviders } from "@/components/providers/client-providers";
 import { fontVariables } from "@/lib/fonts";
 import { siteConfig } from "@/lib/site-config";
 
@@ -62,7 +62,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       suppressHydrationWarning
     >
       <body className="antialiased">
-        <Providers>{children}</Providers>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

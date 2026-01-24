@@ -4,7 +4,7 @@ type PageProps = {
   }>;
 };
 
-export default async function page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
   const { workflowId } = await params;
 
   return <div>Workflow Id: {workflowId}</div>;

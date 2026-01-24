@@ -15,7 +15,7 @@ type ProvidersProps = {
  * This component establishes the client boundary (`"use client"`) for all providers.
  * The root layout remains a Server Component, keeping the provider logic encapsulated here.
  */
-export const Providers = ({ children }: ProvidersProps) => {
+export const ClientProviders = ({ children }: ProvidersProps) => {
   return (
     <TRPCReactProvider>
       <NuqsAdapter>

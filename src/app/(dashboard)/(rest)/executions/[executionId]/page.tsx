@@ -4,7 +4,7 @@ type PageProps = {
   }>;
 };
 
-export default async function page({ params }: PageProps) {
+export default async function Page({ params }: PageProps) {
   const { executionId } = await params;
 
   return <div>Execution Id: {executionId}</div>;

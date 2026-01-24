@@ -17,7 +17,7 @@ type Props = {
  * PURPOSE: Workflows listing page with server-side URL param parsing and data prefetching
  * RENDERS: Workflows list with error boundary, loading state, and tRPC hydration
  */
-export default async function page({ searchParams }: Props) {
+export default async function Page({ searchParams }: Props) {
   const params = await workflowsParamsLoader(searchParams);
 
   prefetchWorkflows(params);
