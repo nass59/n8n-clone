@@ -29,3 +29,12 @@ export type PaginatedResponse<T> = {
 export type StateViewProps = {
   message?: string;
 };
+
+/**
+ * PURPOSE: Props for error state views with retry capability
+ * EXTENDS: StateViewProps with optional retry callback
+ * USED BY: ListError and domain-specific error components
+ */
+export type ErrorViewProps = StateViewProps & {
+  onRetry?: () => void;
+};

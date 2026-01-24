@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * PURPOSE: Domain-specific wrapper for workflow list item
  * RENDERS: ListItem with workflow icon, timestamps, and delete action
@@ -7,6 +9,7 @@
 
 import { IconTopologyRing } from "@tabler/icons-react";
 import { formatDistanceToNow } from "date-fns";
+import { useCallback } from "react";
 import type { Workflow } from "@/generated/prisma/client";
 import { ListItem } from "@/modules/shared/components/list-view/list-item";
 import { useRemoveWorkflow } from "../../hooks/use-workflows";
@@ -18,9 +21,9 @@ type Props = {
 export const WorkflowItem = ({ data }: Props) => {
   const removeWorkflow = useRemoveWorkflow();
 
-  const handleRemove = () => {
+  const handleRemove = useCallback(() => {
     removeWorkflow.mutate({ id: data.id });
-  };
+  }, [removeWorkflow, data.id]);
 
   return (
     <ListItem

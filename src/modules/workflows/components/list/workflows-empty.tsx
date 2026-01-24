@@ -1,30 +1,17 @@
-import { useRouter } from "next/navigation";
-import { useUpgradeModal } from "@/hooks/use-upgrade-modal";
+"use client";
+
 import { ListEmpty } from "@/modules/shared/components/list-view/list-empty";
-import { useCreateWorkflow } from "@/modules/workflows/hooks/use-workflows";
+import { useCreateWorkflowWithNavigation } from "../../hooks/use-create-workflow-with-navigation";
 
 /**
  * PURPOSE: Empty state with CTA to create first workflow
  * RENDERS: ListEmpty message with "Create workflow" button
  * USED BY: WorkflowsList as emptyView fallback
  * ACTIONS: Create workflow → navigate to editor, show upgrade modal on error
- * DEPENDS: useCreateWorkflow, useUpgradeModal, useRouter
+ * DEPENDS: useCreateWorkflowWithNavigation
  */
 export const WorkflowsEmpty = () => {
-  const router = useRouter();
-  const createWorkflow = useCreateWorkflow();
-  const { handleError, modal } = useUpgradeModal();
-
-  const handleCreate = () => {
-    createWorkflow.mutate(undefined, {
-      onSuccess: (data) => {
-        router.push(`/workflows/${data.id}`);
-      },
-      onError: (error) => {
-        handleError(error);
-      },
-    });
-  };
+  const { handleCreate, modal } = useCreateWorkflowWithNavigation();
 
   return (
     <>
